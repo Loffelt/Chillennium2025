@@ -1,5 +1,6 @@
 import basilisk as bsk
 import pygame as pg
+import numpy as np
 
 
 class RenderHandler:
@@ -7,10 +8,11 @@ class RenderHandler:
         self.game = game
         self.engine = game.engine
 
+
+        self.default_shader = self.engine.shader
         # Shaders
         self.geo_shader   = bsk.Shader(self.engine, vert='shaders/geometry.vert', frag='shaders/geometry.frag')
         self.norm_shader  = bsk.Shader(self.engine, vert='shaders/normal.vert',   frag='shaders/normal.frag')
-        # self.depth_shader = bsk.Shader(self.engine, vert='', frag='')
 
         # First render pass
         self.geometry = bsk.Framebuffer(self.engine)
@@ -29,8 +31,6 @@ class RenderHandler:
 
         self.engine.ctx.screen.use()
         self.engine.ctx.clear()
-
-        self.engine.shader = self.geo_shader
         self.geometry.render()
 
         pg.display.flip()
@@ -41,10 +41,9 @@ class RenderHandler:
         """
         
 
-        self.engine.shader = self.geo_shader
-        self.engine.scene.render(self.geometry)
-
         self.engine.shader = self.norm_shader
         self.engine.scene.render(self.normals)
+
+        self.engine.shader = self.geo_shader
+        self.engine.scene.render(self.geometry)
         
-        # self.engine.shader = self.geo_shader
