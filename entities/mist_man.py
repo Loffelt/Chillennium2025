@@ -71,6 +71,6 @@ class MistMan():
         self._position = value
         
         # compute the positions of the feet
-        center = self._position + self.forward * FORWARD_OFFSET
-        if (center.x - self.right_foot.x) ** 2 + (center.z - self.right_foot.z) ** 2 > FOOT_RADIUS ** 2:
-            ...
+        # center = self._position + self.forward * FORWARD_OFFSET
+        # if (center.x - self.right_foot.x) ** 2 + (center.z - self.right_foot.z) ** 2 > FOOT_RADIUS ** 2:
+        #     ...

@@ -34,7 +34,8 @@ class EnemyHandler():
             self.scene.particle.add(
                 position = particle_position,
                 material = self.red,
-                scale = 0.07
+                scale = 0.3,
+                life = 0.2,
             )
             
         for enemy in to_remove: del enemy
