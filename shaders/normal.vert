@@ -76,6 +76,7 @@ mat3 getTBN(mat4 modelMatrix, vec3 normal, vec3 tangent, vec3 bitangent){
     return mat3(T, B, N);
 }
 
+
 void main() {
     // Set the model matrix
     mat4 modelMatrix = getModelMatrix(obj_position, obj_rotation, obj_scale);
