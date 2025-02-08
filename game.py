@@ -5,7 +5,7 @@ from entities.enemy_handler import EnemyHandler
 from weapons.bullet_handler import BulletHandler
 from weapons.gun import Gun
 from weapons.bullet import Bullet
-from scenes.game_scene import GameScene
+from scenes.game_scene import GameScene, get_plain_nodes
 from scenes.test_scene import test_scene
 from render.render_handler import RenderHandler
 
@@ -61,15 +61,22 @@ class Game():
     def load_meshes(self):
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
 
-    def load_level(self, scene: bsk.Scene, game_scene: GameScene) -> None:
+    def load_level(self, game_scene: GameScene) -> None:
         """
         Add all nodes to the scene
         """ 
-        scene.remove(*self.plain_scene.nodes)
-        scene.add(*game_scene.nodes, self.player.node)
+        # plain scene
+        self.plain_scene.remove(*self.plain_scene.nodes)
+        self.plain_scene.add(*get_plain_nodes(game_scene))
+        
+        # sight scene
+        self.sight_scene.remove(*self.sight_scene.nodes)
+        self.sight_scene.add(*game_scene.nodes, self.player.node)
         
         self.bullet_handler.bullets = []
         self.enemy_handler.enemies = game_scene.enemies
+        
+        # dimensions scene
 
     def start(self) -> None:
         """
@@ -79,8 +86,7 @@ class Game():
         self.render_handler = RenderHandler(self)
         self.load_meshes()
         
-        self.load_level(self.sight_scene, test_scene(self.player))
-        # self.load_level(self.plain_scene, test_scene(self.player))
+        self.load_level(test_scene(self.player))
 
         self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh, scale=(1, 8, 1)))
 
