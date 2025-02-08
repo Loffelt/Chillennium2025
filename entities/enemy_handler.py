@@ -32,7 +32,7 @@ class EnemyHandler():
             
             particle_position = enemy.mist.get_particle_position()
             if not particle_position: continue
-            self.scene.particle.add(
+            self.sight_scene.particle.add(
                 position = particle_position,
                 material = self.red,
                 scale = random.uniform(0.4, 0.6),
@@ -42,4 +42,4 @@ class EnemyHandler():
         for enemy in to_remove: del enemy
         
     @property
-    def scene(self) -> Scene: return self.game.sight_scene
+    def sight_scene(self) -> Scene: return self.game.sight_scene

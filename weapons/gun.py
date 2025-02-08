@@ -13,7 +13,7 @@ class Gun():
         
         self.time = cooldown
         
-        def get_bullet(path: glm.vec3) -> Bullet: return Bullet(bullet.ricochet_remaining, bullet.damage, bullet.radius, path)
+        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: return Bullet(bullet.ricochet_remaining, bullet.damage, bullet.radius, path, position)
         self.get_bullet = get_bullet
         
     def update(self, dt: float) -> None:
@@ -22,7 +22,7 @@ class Gun():
         """
         self.time += dt
     
-    def shoot(self, forward: glm.vec3) -> list:
+    def shoot(self, position: glm.vec3, forward: glm.vec3) -> list:
         """
         Returns a list of fired bullets if the gun is shot
         """
@@ -33,7 +33,7 @@ class Gun():
         for _ in range(self.count):
             rotation = glm.quat([random.uniform(-self.spread, self.spread) for _ in range(3)])
             path = rotation * forward
-            bullets.append(self.get_bullet(path))
+            bullets.append(self.get_bullet(position, path))
             
         return bullets
     

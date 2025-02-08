@@ -45,7 +45,7 @@ class Game():
                 )
             ),
             node = player_node,
-            engine = self.engine
+            game = self
         )
         
         self.sight_scene.add(player_node)
@@ -56,7 +56,7 @@ class Game():
         
         # add handlers
         self.enemy_handler = EnemyHandler(self)
-        self.bullet_handler = BulletHandler()
+        self.bullet_handler = BulletHandler(self)
 
     def load_meshes(self):
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')

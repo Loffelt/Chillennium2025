@@ -45,7 +45,7 @@ class Enemy(Entity):
         Attempts to fire the gun
         """
         self.gun.update(dt)
-        self.gun.shoot(self.player.position - self.position)
+        self.gun.shoot(self.mist.right_hand, self.player.position - self.position)
         
     @property
     def position(self): return self._position
