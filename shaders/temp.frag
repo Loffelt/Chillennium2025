@@ -62,14 +62,11 @@ void main() {
 
     float mappedDepth = texture(depthMap, uv).r;
 
-    normal = getNormal(mtl, TBN);
-    fragColor = vec4(normal/2 + 0.5, 1.0);
-
-    // if (gl_FragCoord.z < mappedDepth){
-    //     discard;
-    // }
-    // else{
-    //     normal = getNormal(mtl, TBN);
-    //     fragColor = vec4(normal/2 + 0.5, 1.0);
-    // }
+    if (gl_FragCoord.z < mappedDepth){
+        discard;
+    }
+    else{
+        normal = getNormal(mtl, TBN);
+        fragColor = vec4(normal/2 + 0.5, 1.0);
+    }
 }
