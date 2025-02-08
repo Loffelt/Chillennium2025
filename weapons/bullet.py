@@ -1,4 +1,5 @@
 import glm
+from basilisk import Node
 
 
 COOLDOWN = 0.01
@@ -6,14 +7,16 @@ BULLET_SPEED = 50
 
 class Bullet():
     
-    def __init__(self, ricochet_remaining: int, damage: int, radius: float, color: str, path: glm.vec3=None, position: glm.vec3=None) -> None:
+    def __init__(self, ricochet_remaining: int, damage: int, radius: float, color: str, node: Node=None, path: glm.vec3=None, position: glm.vec3=None) -> None:
         self.ricochet_remaining = ricochet_remaining
         self.damage = damage
         self.radius = radius
         self.color  = color
         
         self.position = position
+        self.last_hit = glm.vec3(position) if position else glm.vec3(0, 0, 0)
         self.path = path
+        self.node = node
         
         self.time = 0
         
@@ -23,6 +26,9 @@ class Bullet():
         """
         self.position += dt * self.path * BULLET_SPEED
         self.time += dt
+        
+        self.node.position = self.midpoint
+        self.node.scale.y = glm.length(self.position - self.last_hit) / 2
         
     def get_particle_position(self) -> glm.vec3|None:
         """
@@ -45,3 +51,5 @@ class Bullet():
     
     @property
     def is_dead(self): return self.ricochet_remaining < 0
+    @property
+    def midpoint(self): return (self.position + self.last_hit) / 2

@@ -1,11 +1,13 @@
 from weapons.bullet import Bullet
+from basilisk import Node
 import glm
 import random
 
 
 class Gun():
     
-    def __init__(self, count: int, capacity: int, cooldown: float, spread: float, bullet: Bullet) -> None:
+    def __init__(self, game, count: int, capacity: int, cooldown: float, spread: float, ricochets: int, damage: int, radius: float, color: str) -> None:
+        self.game = game
         self.count = count
         self.capacity = capacity
         self.cooldown = cooldown
@@ -13,7 +15,15 @@ class Gun():
         
         self.time = cooldown
         
-        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: return Bullet(bullet.ricochet_remaining, bullet.damage, bullet.radius, bullet.color, path, position)
+        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: 
+            cylinder = Node(
+                position, 
+                scale = (radius, 0.01, radius),
+                mesh = self.game.cylinder_mesh,
+                rotation = glm.quatLookAt(path, (0, 1, 0))
+            )
+            self.game.dimension_scene.add(cylinder)
+            return Bullet(ricochets, damage, radius, color, cylinder, path, position)
         self.get_bullet = get_bullet
         
     def update(self, dt: float) -> None:

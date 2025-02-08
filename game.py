@@ -28,7 +28,8 @@ class Game():
             physics = True,
             collision = True,
             scale = (1, 2, 1),
-            tags = ['player']
+            tags = ['player'],
+            collision_group = 'entity'
         )
         
         self.player = Player(
@@ -36,16 +37,15 @@ class Game():
             health = 3,
             speed = 10,
             gun = Gun(
+                game = self,
                 count = 1,
                 capacity = 7,
                 cooldown = 0.2,
                 spread = 0.02,
-                bullet = Bullet(
-                    ricochet_remaining = 1,
-                    damage = 1,
-                    radius = 1.0,
-                    color  = 'black'
-                )
+                ricochets = 1,
+                damage = 1,
+                radius = 1.0,
+                color  = 'black'
             ),
             node = player_node,
             game = self
@@ -75,8 +75,7 @@ class Game():
         # sight scene
         self.sight_scene.remove(*self.sight_scene.nodes)
         self.sight_scene.add(*game_scene.nodes, self.player.node)
-        
-        print(len(self.sight_scene.nodes))
+        for enemy in game_scene.enemies: self.sight_scene.add(enemy.node)
         
         self.bullet_handler.bullets = []
         self.enemy_handler.enemies = game_scene.enemies
@@ -91,7 +90,7 @@ class Game():
         self.render_handler = RenderHandler(self)
         self.load_meshes()
         
-        self.load_level(test_scene(self.player))
+        self.load_level(test_scene(self))
 
         self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh, scale=(1, 8, 1)))
 
