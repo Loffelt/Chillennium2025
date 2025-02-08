@@ -12,7 +12,32 @@ class Game:
     def __init__(self) -> None:
         self.engine = bsk.Engine()
         self.scene = bsk.Scene()
-        self.engine.scene = self.scene
+        
+        player_node = bsk.Node(
+            physics = True,
+            collision = True
+        )
+        
+        self.player = Player(
+            position = glm.vec3(0, 0, 0), 
+            health = 3,
+            speed = 1,
+            gun = Gun(
+                count = 1,
+                capacity = 7,
+                cooldown = 0.2,
+                spread = 0.02,
+                bullet = Bullet(
+                    ricochet_remaining = 1,
+                    damage = 1,
+                    radius = 1.0
+                )
+            ),
+            node = player_node,
+            engine = self
+        )
+        
+        self.scene.add(player_node)
 
     def load_level(self) -> None:
         """
