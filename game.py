@@ -10,7 +10,7 @@ from scenes.test_scene import test_scene
 from render.render_handler import RenderHandler
 
 
-class Game:
+class Game():
     
     def __init__(self) -> None:
         self.engine = bsk.Engine()
@@ -25,7 +25,7 @@ class Game:
         self.player = Player(
             position = glm.vec3(0, 0, 0), 
             health = 3,
-            speed = 6,
+            speed = 10,
             gun = Gun(
                 count = 1,
                 capacity = 7,
@@ -42,9 +42,10 @@ class Game:
         )
         
         self.scene.add(player_node)
+        self.scene.camera = bsk.FollowCamera(player_node)
         
         # add handlers
-        self.enemy_handler = EnemyHandler()
+        self.enemy_handler = EnemyHandler(self.engine)
         self.bullet_handler = BulletHandler()
 
     def load_level(self, game_scene: GameScene) -> None:
@@ -67,6 +68,8 @@ class Game:
 
         while self.engine.running:
             
+            self.bullet_handler.update(self.engine.delta_time)
+            self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
             
             self.engine.update(render=True)

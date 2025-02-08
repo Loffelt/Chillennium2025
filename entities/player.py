@@ -11,7 +11,6 @@ class Player(Entity):
         super().__init__(position, health, speed)
         
         self.engine = engine
-        self.camera: FollowCamera = self.engine.scene.camera
 
         self.gun = gun
         
@@ -27,10 +26,13 @@ class Player(Entity):
         """
         Sets the player's node's velocity to the input keys (wasd)
         """
+        self._position = self.node.position.data - glm.vec3(0, 2, 0)
+        
+        # contraol the player's position by adding velocity to the node
         keys = self.engine.keys
         x, z = self.camera.forward.x, self.camera.forward.z
         movement = self.camera.right * (keys[pg.K_d] - keys[pg.K_a])
-        if x != 0 or z != 0: movement += glm.normalize((x, 0, z)) * (keys[pg.K_w] - keys[pg.K_s])
+        if x != 0 or z != 0: movement += glm.vec3(x, 0, z) * (keys[pg.K_w] - keys[pg.K_s])
         if glm.length2(movement) > 0: movement = self.speed * glm.normalize(movement)
         
         self.node.velocity.x = movement.x
@@ -46,9 +48,11 @@ class Player(Entity):
         
     @property
     def position(self): return self._position
+    @property
+    def camera(self): return self.engine.scene.camera
     
     @position.setter
     def position(self, value):
-        self._position = value
         self.node.position = value
+        self._position = self.node.position.data - glm.vec3(0, 2, 0)
         

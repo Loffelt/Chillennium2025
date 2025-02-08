@@ -2,15 +2,28 @@ import glm
 import random
 
 
+HEAD_RADIUS = 0.2
+FOOT_RADIUS = 0.3
+
+TORSO_LENGTH = 1
+LEG_LENGTH = 1
+NECK_LENGTH = 0.5
+
+FORWARD_OFFSET = 0.1
+
 class MistMan():
     
-    def __init__(self, position: glm.vec3, torso: float=0.5, leg: float=0.5, head: float=0.1, cooldown: float=0.2) -> None:
+    def __init__(self, position: glm.vec3, cooldown: float=0.01) -> None:
         
-        self.right_leg = self.left_leg = position
+        self.forward  = glm.vec3(0, 0, -1)
         self.position = position
-        self.hip = self.position + (0, leg, 0)
-        self.chest = self.hip + (0, torso, 0)
-        self.head = self.chest + (0, head, 0)
+        
+        right = (0.4, 0, 0)
+        left = (-0.4, 0, 0)
+        self.right_foot = position + right
+        self.left_foot = position + left
+        self.right_hand = self.chest + right
+        self.left_hand = self.chest + left
         
         self.cooldown = cooldown
         self.time = 0
@@ -30,14 +43,34 @@ class MistMan():
         
         choice = random.randint(0, 5)
         if not choice: # spawn on head
-            ...
-            return
+            offset = glm.normalize([random.uniform(-1, 1) for _ in range(3)])
+            offset *= HEAD_RADIUS
+            return self.head + offset
 
         # if the particle spawns on the body
+        percent = random.uniform(0, 1)
+        match choice:
+            case 1: return self.hip + (self.chest      - self.hip) * percent
+            case 2: return self.hip + (self.right_foot - self.hip) * percent
+            case 3: return self.hip + (self.left_foot  - self.hip) * percent
+            case 4: return self.chest + (self.right_hand - self.chest) * percent
+            case 5: return self.chest + (self.left_hand  - self.chest) * percent
     
     @property
     def position(self): return self._position
+    @property
+    def hip(self): return self.position + (0, LEG_LENGTH, 0)
+    @property
+    def chest(self): return self.hip + (0, TORSO_LENGTH, 0)
+    @property
+    def head(self): return self.chest + (0, NECK_LENGTH, 0)
+    
     
     @position.setter
     def position(self, value): 
         self._position = value
+        
+        # compute the positions of the feet
+        center = self._position + self.forward * FORWARD_OFFSET
+        if (center.x - self.right_foot.x) ** 2 + (center.z - self.right_foot.z) ** 2 > FOOT_RADIUS ** 2:
+            ...

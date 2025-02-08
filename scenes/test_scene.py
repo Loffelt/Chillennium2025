@@ -16,7 +16,7 @@ def test_scene(player) -> GameScene:
     )
     
     enemy = Enemy(
-        position = glm.vec3(10, 0, 10), 
+        position = glm.vec3(10, -4, -10), 
         health = 1, 
         speed = 3, 
         spread = 0.1,
