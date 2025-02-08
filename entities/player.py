@@ -44,7 +44,11 @@ class Player(Entity):
         self.gun.update(dt)
         if not self.engine.mouse.left_click: return
         
-        bullets = self.gun.shoot(self.camera.position, self.camera.forward)
+        fire_position = self.camera.position + (1, 0, -0.5)
+        cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)
+        target = cast.position if cast.node else self.camera.forward * 1e3
+        
+        bullets = self.gun.shoot(fire_position, glm.normalize(target - fire_position))
         if not bullets: return
         
         self.game.bullet_handler.bullets += bullets
