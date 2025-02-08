@@ -19,6 +19,7 @@ class Bullet():
         self.node = node
         
         self.time = 0
+        self.life_time = 0
         
     def update(self, dt: float) -> None:
         """
@@ -26,6 +27,7 @@ class Bullet():
         """
         self.position += dt * self.path * BULLET_SPEED
         self.time += dt
+        self.life_time += dt
         
         if self.node:
             self.node.position = self.midpoint
@@ -51,7 +53,7 @@ class Bullet():
         return f'Bullet - ricochet: {self.ricochet_remaining}, damage: {self.damage}, radius: {self.radius}'
     
     @property
-    def is_dead(self): return self.ricochet_remaining < 0
+    def is_dead(self): return self.ricochet_remaining < 0 or self.life_time > 10
     @property
     def midpoint(self): return (self.position + self.last_hit) / 2
     @property

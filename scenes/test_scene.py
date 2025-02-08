@@ -15,6 +15,12 @@ def test_scene(game) -> GameScene:
         collision = True
     )
     
+    ceiling = Node(
+        position = (0, 20, 0),
+        scale = (20, 1, 20),
+        collision = True
+    )
+    
     box = Node(
         position=(1, 2, 3),
         physics=True,
@@ -44,6 +50,7 @@ def test_scene(game) -> GameScene:
     
     gs.enemies.append(enemy)
     gs.nodes.append(platform)
+    gs.nodes.append(ceiling)
     gs.nodes.append(box)
     gs.nodes += walls
     

@@ -49,45 +49,55 @@ class BulletHandler():
                         self.game.dimension_scene.add(bullet.node)
                     
                 elif 'enemy' in cast.node.tags: bullet.ricochet_remaining = -1
+                
+                # elif cast.node.physics:
+                #     cast.node.apply_offset_force(-cast.normal * 10, cast.position - cast.node.position.data, dt)
                     
                 if bullet.is_dead: # bullet on death sequence
                     to_remove.append(bullet)
                     self.particle_splatter(cast.position, cast.normal, bullet.color)
             
             # always add the bullet particle so player can see where its going
-            self.add_bullet_particles(bullet)
+            self.add_bullet_particles(bullet, bullet_origin)
         
         # remove dead bullets from the bullet handler
         for bullet in to_remove: self.bullets.remove(bullet)
         
-    def add_bullet_particles(self, bullet: Bullet) -> None:
+    def add_bullet_particles(self, bullet: Bullet, origin: glm.vec3) -> None:
         
         # update bullet particles
             particle_position = bullet.get_particle_position()
             if not particle_position: return
             
-            self.sight_scene.particle.add(
-                position = particle_position,
-                material = self.materials[bullet.color],
-                scale = 0.1,
-                life = 0.2
-            )
-            
-            self.plain_scene.particle.add(
-                position = particle_position,
-                material = self.materials[bullet.color],
-                scale = 0.1,
-                life = 0.2
-            )
+            vec = origin - particle_position
+            for i in range(1, 5):
+                self.sight_scene.particle.add(
+                    position = particle_position + i * vec / 4,
+                    material = self.materials[bullet.color],
+                    scale = 0.1,
+                    life = 0.2
+                )
+                
+                self.plain_scene.particle.add(
+                    position = particle_position + i * vec / 4,
+                    material = self.materials[bullet.color],
+                    scale = 0.1,
+                    life = 0.2
+                )
             
     def particle_splatter(self, position: glm.vec3, normal: glm.vec3, color: tuple) -> None:
         for _ in range(10):
+            
+            velocity = normal + [random.uniform(-1, 1) for _ in range(3)]
+            scale = random.uniform(0.1, 0.3)
+            
             self.sight_scene.particle.add(
                 position = position,
-                material = self.materials['red'],
-                # velocity = normal,
-                # scale = random.uniform(0.2, 0.5),
-                life = 0.2
+                material = self.materials[color],
+                velocity = velocity,
+                acceleration = (0, -4, 0),
+                scale = scale,
+                life = 0.5
             )
             
     @property
