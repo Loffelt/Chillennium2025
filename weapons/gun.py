@@ -1,11 +1,13 @@
 from weapons.bullet import Bullet
+from basilisk import Node
 import glm
 import random
 
 
 class Gun():
     
-    def __init__(self, count: int, capacity: int, cooldown: float, spread: float, bullet: Bullet) -> None:
+    def __init__(self, game, count: int, capacity: int, cooldown: float, spread: float, ricochets: int, damage: int, radius: float, color: str) -> None:
+        self.game = game
         self.count = count
         self.capacity = capacity
         self.cooldown = cooldown
@@ -13,7 +15,16 @@ class Gun():
         
         self.time = cooldown
         
-        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: return Bullet(bullet.ricochet_remaining, bullet.damage, bullet.radius, path, position)
+        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet:
+            if color == 'black':
+                cylinder = Node(
+                    position, 
+                    scale = (radius, 0.01, radius),
+                    mesh = self.game.cylinder_mesh
+                )
+                self.game.dimension_scene.add(cylinder)
+                return Bullet(ricochets, damage, radius, color, cylinder, path, position)
+            else: return Bullet(ricochets, damage, radius, color, None, path, position)
         self.get_bullet = get_bullet
         
     def update(self, dt: float) -> None:
@@ -31,8 +42,7 @@ class Gun():
         
         bullets = []
         for _ in range(self.count):
-            rotation = glm.quat([random.uniform(-self.spread, self.spread) for _ in range(3)])
-            path = rotation * forward
+            path = glm.normalize(forward + [random.uniform(-self.spread, self.spread) for _ in range(3)])
             bullets.append(self.get_bullet(position, path))
             
         return bullets

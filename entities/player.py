@@ -30,7 +30,7 @@ class Player(Entity):
         # contraol the player's position by adding velocity to the node
         keys = self.engine.keys
         x, z = self.camera.forward.x, self.camera.forward.z
-        movement = self.camera.right * (keys[pg.K_d] - keys[pg.K_a])
+        movement = self.camera.right * (keys[pg.K_d] * (1 + keys[pg.K_LSHIFT]) - keys[pg.K_a]) # should change fov when sprinting
         if x != 0 or z != 0: movement += glm.vec3(x, 0, z) * (keys[pg.K_w] - keys[pg.K_s])
         if glm.length2(movement) > 0: movement = self.speed * glm.normalize(movement)
         
@@ -58,6 +58,6 @@ class Player(Entity):
     
     @position.setter
     def position(self, value):
-        self.node.position = value
-        self._position = self.node.position.data - glm.vec3(0, 1, 0)
+        self._position = value
+        self.node.position.data = self._position + glm.vec3(0, 1, 0)
         

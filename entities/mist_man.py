@@ -3,15 +3,16 @@ import random
 
 
 HEAD_RADIUS = 0.2
-FOOT_RADIUS = 0.5
+FOOT_RADIUS = 0.25
 
 TORSO_LENGTH = 1
 LEG_LENGTH = 1
 NECK_LENGTH = 0.5
-ARM_LENGTH = 0.4
-SHOULDER_WIDTH = 0.2
+ARM_LENGTH = 0.5
+SHOULDER_WIDTH = 0.3
 
 FORWARD_OFFSET = 0.1
+DIFFUSE_STRENGTH = 0.2
 
 class MistMan():
     
@@ -42,7 +43,7 @@ class MistMan():
         if self.time < self.cooldown: return None
         self.time = 0
         
-        diffuse = 0.1 * glm.normalize([random.uniform(-1, 1) for _ in range(3)])
+        diffuse = DIFFUSE_STRENGTH * glm.normalize([random.uniform(-1, 1) for _ in range(3)])
         choice = random.randint(0, 7)
         if not choice: # spawn on head
             offset = glm.normalize([random.uniform(-1, 1) for _ in range(3)])
@@ -52,13 +53,13 @@ class MistMan():
         # if the particle spawns on the body
         percent = random.uniform(0, 1)
         match choice:
-            case 1: return self.hip + (self.chest      - self.hip) * percent + diffuse
-            case 2: return self.hip + (self.right_foot - self.hip) * percent + diffuse
-            case 3: return self.hip + (self.left_foot  - self.hip) * percent + diffuse
-            case 4: return self.chest + (self.right_shoulder- self.chest) * percent + diffuse
-            case 5: return self.chest + (self.left_shoulder  - self.chest) * percent + diffuse
-            case 6: return self.right_shoulder + (self.right_hand - self.right_shoulder) * percent + diffuse
-            case 7: return self.left_shoulder + (self.left_hand - self.left_shoulder) * percent + diffuse
+            case 1: return self.hip + (self.chest      - self.hip) * percent + diffuse # chest
+            case 2: return self.hip + (self.right_foot - self.hip) * percent + diffuse # r leg
+            case 3: return self.hip + (self.left_foot  - self.hip) * percent + diffuse # l leg
+            case 4: return self.chest + (self.right_shoulder - self.chest) * percent + diffuse # r shoulder
+            case 5: return self.chest + (self.left_shoulder  - self.chest) * percent + diffuse # l shoulder
+            case 6: return self.right_shoulder + (self.right_hand - self.right_shoulder) * percent + diffuse # r arm
+            case 7: return self.left_shoulder + (self.left_hand   - self.left_shoulder) * percent + diffuse # l arm
     
     @property
     def position(self): return self._position
@@ -69,11 +70,13 @@ class MistMan():
     @property
     def head(self): return self.chest + (0, NECK_LENGTH, 0)
     @property
-    def right_shoulder(self): return self.chest + (-SHOULDER_WIDTH, 0, 0)
+    def right_shoulder(self): return self.chest + self.right * SHOULDER_WIDTH
     @property
-    def left_shoulder(self): return self.chest + (SHOULDER_WIDTH, 0, 0)
+    def left_shoulder(self): return self.chest - self.right * SHOULDER_WIDTH
     @property
     def forward(self): return self._forward
+    @property
+    def right(self): return glm.normalize(glm.cross(self.forward, (0, 1, 0)))
     
     
     @position.setter
@@ -84,12 +87,10 @@ class MistMan():
         center = self._position
         
         if (center.x - self.right_foot.x) ** 2 + (center.z - self.right_foot.z) ** 2 > FOOT_RADIUS ** 2:
-            direction = glm.normalize(glm.cross(self.forward, (0, 1, 0)))
-            self.right_foot = self.position + direction * FOOT_RADIUS
+            self.right_foot = self.position + self.right * FOOT_RADIUS
             
         if (center.x - self.left_foot.x) ** 2 + (center.z - self.left_foot.z) ** 2 > FOOT_RADIUS ** 2:
-            direction = glm.normalize(-glm.cross(self.forward, (0, 1, 0)))
-            self.left_foot = self.position + direction * FOOT_RADIUS
+            self.left_foot = self.position - self.right * FOOT_RADIUS
             
         self.right_hand = self.left_hand = self.chest + self.forward * ARM_LENGTH
 
