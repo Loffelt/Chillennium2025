@@ -18,6 +18,7 @@ class Game():
         self.plain_scene = bsk.Scene()
         self.sight_scene = bsk.Scene()
         self.dimension_scene = bsk.Scene()
+
         self.engine.scene = self.plain_scene
         self.engine.scene = self.sight_scene
         self.engine.scene = self.dimension_scene 
@@ -47,12 +48,18 @@ class Game():
             engine = self.engine
         )
         
-        self.plain_scene.add(player_node)
-        self.plain_scene.camera = bsk.FollowCamera(player_node)
+        self.sight_scene.add(player_node)
+        self.sight_scene.camera = bsk.FollowCamera(player_node)
+        self.plain_scene.camera = self.sight_scene.camera
+        self.dimension_scene.camera = self.sight_scene.camera
+        self.sky = self.sight_scene.sky
         
         # add handlers
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler()
+
+    def load_meshes(self):
+        self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
 
     def load_level(self, scene: bsk.Scene, game_scene: GameScene) -> None:
         """
@@ -70,13 +77,27 @@ class Game():
         """
         
         self.render_handler = RenderHandler(self)
-        self.load_level(self.plain_scene, test_scene(self.player))
+        self.load_meshes()
+        
+        self.load_level(self.sight_scene, test_scene(self.player))
+        # self.load_level(self.plain_scene, test_scene(self.player))
+
+        self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh))
 
         while self.engine.running:
+
+            if self.engine.keys[bsk.pg.K_1]:
+                self.render_handler.show = self.render_handler.geometry
+            if self.engine.keys[bsk.pg.K_2]:
+                self.render_handler.show = self.render_handler.normals
+            if self.engine.keys[bsk.pg.K_3]:
+                self.render_handler.show = self.render_handler.dimensions
+
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
 
+            self.engine.scene = self.sight_scene
             self.engine.update(render=False)
             self.render_handler.render()
 
