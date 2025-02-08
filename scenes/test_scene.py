@@ -15,26 +15,26 @@ def test_scene(player) -> GameScene:
         collision = True
     )
     
-    enemy = Enemy(
-        position = glm.vec3(10, -4, -10), 
-        health = 1, 
-        speed = 3, 
-        spread = 0.1,
-        gun = Gun(
-            count = 1,
-            capacity = 3,
-            spread = 0.05,
-            cooldown = 1,
-            bullet = Bullet(
-                ricochet_remaining = 1,
-                damage = 1,
-                radius = 0
-            )
-        ),
-        player = player
-    )
+    # enemy = Enemy(
+    #     position = glm.vec3(10, -4, -10), 
+    #     health = 1, 
+    #     speed = 3, 
+    #     spread = 0.1,
+    #     gun = Gun(
+    #         count = 1,
+    #         capacity = 3,
+    #         spread = 0.05,
+    #         cooldown = 1,
+    #         bullet = Bullet(
+    #             ricochet_remaining = 1,
+    #             damage = 1,
+    #             radius = 0
+    #         )
+    #     ),
+    #     player = player
+    # )
     
-    gs.enemies.append(enemy)
+    # gs.enemies.append(enemy)
     gs.nodes.append(platform)
     
     return gs
