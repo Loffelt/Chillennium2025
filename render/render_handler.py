@@ -39,11 +39,10 @@ class RenderHandler:
         """
         
         """
-        
 
         self.engine.shader = self.norm_shader
-        self.engine.scene.render(self.normals)
+        self.game.plain_scene.render(self.normals)
 
         self.engine.shader = self.geo_shader
-        self.engine.scene.render(self.geometry)
+        self.game.plain_scene.render(self.geometry)
         

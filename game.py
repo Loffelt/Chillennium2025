@@ -14,7 +14,13 @@ class Game():
     
     def __init__(self) -> None:
         self.engine = bsk.Engine()
-        self.scene = bsk.Scene()
+
+        self.plain_scene = bsk.Scene()
+        self.sight_scene = bsk.Scene()
+        self.dimension_scene = bsk.Scene()
+        self.engine.scene = self.plain_scene
+        self.engine.scene = self.sight_scene
+        self.engine.scene = self.dimension_scene 
         
         # add player to scene
         player_node = bsk.Node(
@@ -41,19 +47,19 @@ class Game():
             engine = self.engine
         )
         
-        self.scene.add(player_node)
-        self.scene.camera = bsk.FollowCamera(player_node)
+        self.plain_scene.add(player_node)
+        self.plain_scene.camera = bsk.FollowCamera(player_node)
         
         # add handlers
         self.enemy_handler = EnemyHandler(self.engine)
         self.bullet_handler = BulletHandler()
 
-    def load_level(self, game_scene: GameScene) -> None:
+    def load_level(self, scene: bsk.Scene, game_scene: GameScene) -> None:
         """
         Add all nodes to the scene
         """ 
-        self.scene.remove(*self.scene.nodes)
-        self.scene.add(*game_scene.nodes, self.player.node)
+        scene.remove(*self.plain_scene.nodes)
+        scene.add(*game_scene.nodes, self.player.node)
         
         self.bullet_handler.bullets = []
         self.enemy_handler.enemies = game_scene.enemies
@@ -64,23 +70,24 @@ class Game():
         """
         
         self.render_handler = RenderHandler(self)
-        self.load_level(test_scene(self.player))
+        self.load_level(self.plain_scene, test_scene(self.player))
 
         while self.engine.running:
             
+            if self.engine.keys[bsk.pg.K_1]:
+                self.engine.scene = self.plain_scene
+            if self.engine.keys[bsk.pg.K_2]:
+                self.engine.scene = self.sight_scene
+            if self.engine.keys[bsk.pg.K_3]:
+                self.engine.scene = self.dimension_scene
+
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
-            
+
             self.engine.update(render=True)
             # self.render_handler.render()
-            
-    @property
-    def scene(self) -> bsk.Scene: return self.engine.scene
-    
-    @scene.setter
-    def scene(self, value): 
-        self.engine.scene = value
+
 
 game = Game()
 game.start()
