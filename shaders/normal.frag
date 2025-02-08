@@ -51,6 +51,7 @@ vec3 getNormal(Material mtl, mat3 TBN){
     return normal;
 }
 
+uniform vec2 viewportDimensions;
 
 void main() {
     // Get lighting vectors
@@ -58,4 +59,5 @@ void main() {
 
     // Output fragment color
     fragColor = vec4(normal + gl_FragCoord.z / 20, 1.0);
+    fragColor.rg += viewportDimensions/ 1600;
 }
