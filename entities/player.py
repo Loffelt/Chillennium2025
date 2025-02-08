@@ -12,6 +12,7 @@ class Player(Entity):
         
         self.game = game
         self.gun = gun
+        self.jumping = False
         
     def update(self, dt: float) -> None:
         """
@@ -20,6 +21,10 @@ class Player(Entity):
         self.node.rotation = glm.conjugate(glm.quatLookAt(glm.vec3(self.camera.forward.x, 0, self.camera.forward.z), self.camera.UP))
         # self.game.player_gun.rotation = self.game.sight_scene.camera.rotation
         # self.game.player_gun.position = self.node.position.data + glm.vec3(0, 1.5, 0)
+        if self.position.y < 1.1: 
+            self.position.y = 1
+            if not self.jumping: self.node.velocity.y = 0
+            
         self.move()
         self.shoot(dt)
         
@@ -46,7 +51,7 @@ class Player(Entity):
         self.gun.update(dt)
         if not self.engine.mouse.left_click: return
         
-        fire_position = self.camera.position + (1, 0, -0.5)
+        fire_position = self.camera.position + self.camera.right * 0.5
         cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)
         target = cast.position if cast.node else self.camera.forward * 1e3
         

@@ -7,7 +7,7 @@ BULLET_SPEED = 50
 
 class Bullet():
     
-    def __init__(self, ricochet_remaining: int, damage: int, radius: float, color: str, node: Node=None, path: glm.vec3=None, position: glm.vec3=None) -> None:
+    def __init__(self, ricochet_remaining: int, damage: int, radius: float, color: str, node: Node=None, path: glm.vec3=None, position: glm.vec3=None, owner: str='enemy') -> None:
         self.ricochet_remaining = ricochet_remaining
         self.damage = damage
         self.radius = radius
@@ -17,6 +17,7 @@ class Bullet():
         self.last_hit = glm.vec3(position) if position else glm.vec3(0, 0, 0)
         self.path = path
         self.node = node
+        self.owner = owner
         
         self.time = 0
         self.life_time = 0

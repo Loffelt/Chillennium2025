@@ -6,7 +6,7 @@ import random
 
 class Gun():
     
-    def __init__(self, game, count: int, capacity: int, cooldown: float, spread: float, ricochets: int, damage: int, radius: float, color: str) -> None:
+    def __init__(self, game, count: int, capacity: int, cooldown: float, spread: float, ricochets: int, damage: int, radius: float, color: str, owner: str='enemy') -> None:
         self.game = game
         self.count = count
         self.capacity = capacity
@@ -23,8 +23,8 @@ class Gun():
                     mesh = self.game.cylinder_mesh
                 )
                 self.game.dimension_scene.add(cylinder)
-                return Bullet(ricochets, damage, radius, color, cylinder, path, position)
-            else: return Bullet(ricochets, damage, radius, color, None, path, position)
+                return Bullet(ricochets, damage, radius, color, cylinder, path, position, owner)
+            else: return Bullet(ricochets, damage, radius, color, None, path, position, owner)
         self.get_bullet = get_bullet
         
     def update(self, dt: float) -> None:

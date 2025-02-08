@@ -1,4 +1,5 @@
 import glm
+from entities.enemy import Enemy
 from weapons.bullet import Bullet
 from basilisk import Scene, Material, Node
 import random
@@ -48,7 +49,14 @@ class BulletHandler():
                         
                         self.game.dimension_scene.add(bullet.node)
                     
-                elif 'enemy' in cast.node.tags: bullet.ricochet_remaining = -1
+                elif bullet.owner == 'player' and 'enemy' in cast.node.tags: 
+                    # print('enemy hit')
+                    bullet.ricochet_remaining = -1
+                    enemy: Enemy = self.game.enemy_handler.get_enemy_by_node(cast.node)
+                    if enemy: # probably dont need this check
+                        enemy.health -= bullet.damage
+                        
+                elif bullet.owner == 'enemy' and 'player' in cast.node.tags: ...
                 
                 # elif cast.node.physics:
                 #     cast.node.apply_offset_force(-cast.normal * 10, cast.position - cast.node.position.data, dt)
