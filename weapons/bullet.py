@@ -31,7 +31,7 @@ class Bullet():
         
         if self.node:
             self.node.position = self.midpoint
-            self.node.scale.z = glm.length(self.position - self.last_hit) / 2
+            self.node.scale.y = glm.length(self.position - self.last_hit) / 2
         
     def get_particle_position(self) -> glm.vec3|None:
         """
