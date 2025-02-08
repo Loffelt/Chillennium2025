@@ -26,7 +26,7 @@ class Player(Entity):
         """
         Sets the player's node's velocity to the input keys (wasd)
         """
-        self._position = self.node.position.data - glm.vec3(0, 2, 0)
+        self._position = self.node.position.data - glm.vec3(0, 1, 0)
         
         # contraol the player's position by adding velocity to the node
         keys = self.engine.keys
@@ -54,5 +54,5 @@ class Player(Entity):
     @position.setter
     def position(self, value):
         self.node.position = value
-        self._position = self.node.position.data - glm.vec3(0, 2, 0)
+        self._position = self.node.position.data - glm.vec3(0, 1, 0)
         

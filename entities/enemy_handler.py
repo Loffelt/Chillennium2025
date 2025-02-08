@@ -1,12 +1,13 @@
 import glm
+import random
 from entities.enemy import Enemy
-from basilisk import Engine, Material, Scene
+from basilisk import Material, Scene
 
 
 class EnemyHandler():
     
-    def __init__(self, engine: Engine) -> None:
-        self.engine = engine
+    def __init__(self, game) -> None:
+        self.game = game
         self.enemies: list[Enemy] = []
         self.red = Material(
             color = (255, 0, 0)
@@ -34,11 +35,11 @@ class EnemyHandler():
             self.scene.particle.add(
                 position = particle_position,
                 material = self.red,
-                scale = 0.3,
+                scale = random.uniform(0.2, 0.4),
                 life = 0.2,
             )
             
         for enemy in to_remove: del enemy
         
     @property
-    def scene(self) -> Scene: return self.engine.scene
+    def scene(self) -> Scene: return self.game.scene

@@ -11,4 +11,10 @@ class BulletHandler():
         """
         Updates the positions of all bullets in the list
         """
-        for bullet in self.bullets: bullet.update(dt)
+        for bullet in self.bullets: 
+            
+            bullet.update(dt)
+
+            if bullet.ricochet_remaining == -1: ...
+            
+            
