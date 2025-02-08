@@ -15,6 +15,7 @@ class Enemy(Entity):
         self.spread = spread
         
         self.gun = gun
+        self.game = game
         self.player: Player = game.player
         self.mist = MistMan(position)
         self.node = Node(
@@ -54,7 +55,9 @@ class Enemy(Entity):
         Attempts to fire the gun
         """
         self.gun.update(dt)
-        self.gun.shoot(self.mist.right_hand, self.player.position - self.position)
+        bullets = self.gun.shoot(self.mist.right_hand, self.player.position - (0, 0.5, 0) - self.position)
+        if not bullets: return
+        self.game.bullet_handler.bullets += bullets
         
     @property
     def position(self): return self._position

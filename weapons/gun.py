@@ -15,14 +15,16 @@ class Gun():
         
         self.time = cooldown
         
-        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: 
-            cylinder = Node(
-                position, 
-                scale = (radius, 0.01, radius),
-                mesh = self.game.cylinder_mesh
-            )
-            self.game.dimension_scene.add(cylinder)
-            return Bullet(ricochets, damage, radius, color, cylinder, path, position)
+        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet:
+            if color == 'black':
+                cylinder = Node(
+                    position, 
+                    scale = (radius, 0.01, radius),
+                    mesh = self.game.cylinder_mesh
+                )
+                self.game.dimension_scene.add(cylinder)
+                return Bullet(ricochets, damage, radius, color, cylinder, path, position)
+            else: return Bullet(ricochets, damage, radius, color, None, path, position)
         self.get_bullet = get_bullet
         
     def update(self, dt: float) -> None:

@@ -27,8 +27,9 @@ class Bullet():
         self.position += dt * self.path * BULLET_SPEED
         self.time += dt
         
-        self.node.position = self.midpoint
-        self.node.scale.y = glm.length(self.position - self.last_hit) / 2
+        if self.node:
+            self.node.position = self.midpoint
+            self.node.scale.y = glm.length(self.position - self.last_hit) / 2
         
     def get_particle_position(self) -> glm.vec3|None:
         """
@@ -65,4 +66,4 @@ class Bullet():
     @node.setter
     def node(self, value):
         self._node = value
-        self._node.rotation = glm.angleAxis(glm.acos(glm.dot((0, 1, 0), self.path)), glm.cross(self.path, (0, 1, 0)))
+        if self.node: self._node.rotation = glm.angleAxis(glm.acos(glm.dot((0, 1, 0), self.path)), glm.cross(self.path, (0, 1, 0)))

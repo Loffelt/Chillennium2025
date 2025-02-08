@@ -38,7 +38,7 @@ class BulletHandler():
                     bullet.position = cast.position + cast.normal * 0.01
                     
                     # remove bullet node so the viewer is the sole owner, replace node
-                    if bullet.ricochet_remaining >= 0: 
+                    if bullet.ricochet_remaining >= 0 and bullet.color == 'black': 
                         bullet.last_hit = cast.position
                         bullet.node = Node(
                             position = bullet.position, 
@@ -81,7 +81,6 @@ class BulletHandler():
             )
             
     def particle_splatter(self, position: glm.vec3, normal: glm.vec3, color: tuple) -> None:
-        print('poof')
         for _ in range(10):
             self.sight_scene.particle.add(
                 position = position,
