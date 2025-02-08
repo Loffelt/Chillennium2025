@@ -24,6 +24,10 @@ class Game():
         self.engine.scene = self.sight_scene
         self.engine.scene = self.dimension_scene 
         
+        self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
+        self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
+        self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
+
         # add player to scene
         player_node = bsk.Node(
             physics = True,

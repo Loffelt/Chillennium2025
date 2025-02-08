@@ -37,6 +37,8 @@ class RenderHandler:
         self.normals.texture.use(location=2)
         self.norm_shader.program['depthMap'] = 3
         self.dimensions.depth.use(location=3)
+        self.game.particle_shader.program['depthMap'] = 4
+        self.dimensions.depth.use(location=4)
 
         self.show = self.geometry
 

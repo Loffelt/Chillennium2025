@@ -42,7 +42,7 @@ def test_scene(game) -> GameScene:
         )
     )
     
-    # gs.enemies.append(enemy)
+    gs.enemies.append(enemy)
     gs.nodes.append(platform)
     gs.nodes.append(box)
     gs.nodes += walls
