@@ -49,8 +49,9 @@ class Game():
                 spread = 0.02,
                 ricochets = 1,
                 damage = 1,
-                radius = 1.0,
-                color  = 'black'
+                radius = 0.5,
+                color  = 'black',
+                owner  = 'player'
             ),
             node = player_node,
             game = self
@@ -106,7 +107,6 @@ class Game():
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
-
 
             self.render_handler.render()
 

@@ -1,7 +1,8 @@
 import glm
 import random
 from entities.enemy import Enemy
-from basilisk import Material, Scene
+from basilisk import Material, Scene, pg
+from weapons.gun import Gun
 
 
 class EnemyHandler():
@@ -16,6 +17,8 @@ class EnemyHandler():
         Updates all nodes and checks for death
         """
         to_remove = []
+        
+        # print(len(self.enemies))
         
         for enemy in self.enemies:
             
@@ -38,7 +41,34 @@ class EnemyHandler():
 
             )
             
-        for enemy in to_remove: del enemy
+        for enemy in to_remove:
+            self.enemies.remove(enemy)
+            self.game.sight_scene.remove(enemy.node)
+        
+        if self.game.engine.keys[pg.K_e] and not self.game.engine.previous_keys[pg.K_e]:
+            self.enemies.append(Enemy(
+                game = self.game,
+                position = glm.vec3([random.uniform(-7, 7) for _ in range(3)]),
+                health = 1,
+                speed = 3, 
+                spread = 0.1,
+                gun = Gun(
+                    game = self.game,
+                    count = 1,
+                    capacity = 3,
+                    spread = 0.05,
+                    cooldown = 1,
+                    ricochets = 1,
+                    damage = 1,
+                    radius = 0,
+                    color  = 'red',
+                )
+            ))
+            
+    def get_enemy_by_node(self, node) -> Enemy:
+        for enemy in self.enemies:
+            if enemy.node == node: return enemy
+        return None
         
     @property
     def sight_scene(self) -> Scene: return self.game.sight_scene

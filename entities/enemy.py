@@ -28,6 +28,8 @@ class Enemy(Entity):
             shader=game.invisible_shader
         )
         
+        self.game.sight_scene.add(self.node)
+        
         self.position = position # added after bc mistman is used in the position property
         
     def update(self, dt: float) -> None:
