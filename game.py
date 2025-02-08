@@ -26,7 +26,9 @@ class Game():
         # add player to scene
         player_node = bsk.Node(
             physics = True,
-            collision = True
+            collision = True,
+            scale = (1, 2, 1),
+            tags = ['player']
         )
         
         self.player = Player(
@@ -41,7 +43,8 @@ class Game():
                 bullet = Bullet(
                     ricochet_remaining = 1,
                     damage = 1,
-                    radius = 1.0
+                    radius = 1.0,
+                    color  = 'black'
                 )
             ),
             node = player_node,
@@ -49,7 +52,7 @@ class Game():
         )
         
         self.sight_scene.add(player_node)
-        self.sight_scene.camera = bsk.FollowCamera(player_node)
+        self.sight_scene.camera = bsk.FollowCamera(player_node, offset=(0, 1, 0))
         self.plain_scene.camera = self.sight_scene.camera
         self.dimension_scene.camera = self.sight_scene.camera
         self.sky = self.sight_scene.sky
@@ -72,6 +75,8 @@ class Game():
         # sight scene
         self.sight_scene.remove(*self.sight_scene.nodes)
         self.sight_scene.add(*game_scene.nodes, self.player.node)
+        
+        print(len(self.sight_scene.nodes))
         
         self.bullet_handler.bullets = []
         self.enemy_handler.enemies = game_scene.enemies

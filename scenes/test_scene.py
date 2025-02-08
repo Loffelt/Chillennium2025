@@ -15,6 +15,12 @@ def test_scene(player) -> GameScene:
         collision = True
     )
     
+    walls = [Node(
+        position = (data[0], 5, data[1]), 
+        scale = (data[2], 10, data[3]),
+        collision = True 
+    ) for data in ((20, 0, 1, 20), (-20, 0, 1, 20), (0, 20, 20, 1), (0, -20, 20, 1))]
+    
     enemy = Enemy(
         position = glm.vec3(10, -4, -10), 
         health = 1, 
@@ -28,7 +34,8 @@ def test_scene(player) -> GameScene:
             bullet = Bullet(
                 ricochet_remaining = 1,
                 damage = 1,
-                radius = 0
+                radius = 0,
+                color  = 'red'
             )
         ),
         player = player
@@ -36,5 +43,6 @@ def test_scene(player) -> GameScene:
     
     gs.enemies.append(enemy)
     gs.nodes.append(platform)
+    gs.nodes += walls
     
     return gs

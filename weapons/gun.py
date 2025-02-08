@@ -13,7 +13,7 @@ class Gun():
         
         self.time = cooldown
         
-        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: return Bullet(bullet.ricochet_remaining, bullet.damage, bullet.radius, path, position)
+        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet: return Bullet(bullet.ricochet_remaining, bullet.damage, bullet.radius, bullet.color, path, position)
         self.get_bullet = get_bullet
         
     def update(self, dt: float) -> None:
@@ -31,8 +31,7 @@ class Gun():
         
         bullets = []
         for _ in range(self.count):
-            rotation = glm.quat([random.uniform(-self.spread, self.spread) for _ in range(3)])
-            path = rotation * forward
+            path = glm.normalize(forward + [random.uniform(-self.spread, self.spread) for _ in range(3)])
             bullets.append(self.get_bullet(position, path))
             
         return bullets
