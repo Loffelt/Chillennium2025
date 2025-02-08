@@ -11,8 +11,9 @@ class RenderHandler:
 
         self.default_shader = self.engine.shader
         # Shaders
-        self.geo_shader   = bsk.Shader(self.engine, vert='shaders/geometry.vert', frag='shaders/geometry.frag')
-        self.norm_shader  = bsk.Shader(self.engine, vert='shaders/normal.vert',   frag='shaders/normal.frag')
+        self.geo_shader    = bsk.Shader(self.engine, vert='shaders/geometry.vert', frag='shaders/geometry.frag')
+        self.norm_shader   = bsk.Shader(self.engine, vert='shaders/normal.vert',   frag='shaders/normal.frag')
+        self.output_shader = bsk.Shader(self.engine, frag='shaders/dimensions.frag')
 
         # First render pass
         self.geometry   = bsk.Framebuffer(self.engine)

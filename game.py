@@ -82,7 +82,7 @@ class Game():
         self.load_level(self.sight_scene, test_scene(self.player))
         # self.load_level(self.plain_scene, test_scene(self.player))
 
-        self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh))
+        self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh, scale=(1, 8, 1)))
 
         while self.engine.running:
 
