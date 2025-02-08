@@ -56,8 +56,10 @@ uniform vec2 viewportDimensions;
 void main() {
     // Get lighting vectors
     vec3 normal    = getNormal(mtl, TBN);
+    vec2 uv = (gl_FragCoord.xy) / viewportDimensions;
 
     // Output fragment color
     fragColor = vec4(normal + gl_FragCoord.z / 20, 1.0);
-    fragColor.rg += viewportDimensions/ 1600;
+    fragColor.rgb /= 10000;
+    fragColor.rg += uv;
 }
