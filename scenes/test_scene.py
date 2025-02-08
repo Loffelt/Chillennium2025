@@ -21,26 +21,26 @@ def test_scene(game) -> GameScene:
         collision = True 
     ) for data in ((20, 0, 1, 20), (-20, 0, 1, 20), (0, 20, 20, 1), (0, -20, 20, 1))]
     
-    enemy = Enemy(
-        game = game,
-        position = glm.vec3(10, -4, -10), 
-        health = 1, 
-        speed = 3, 
-        spread = 0.1,
-        gun = Gun(
-            game = game,
-            count = 1,
-            capacity = 3,
-            spread = 0.05,
-            cooldown = 1,
-            ricochets = 1,
-            damage = 1,
-            radius = 0,
-            color  = 'red',
-        )
-    )
+    # enemy = Enemy(
+    #     game = game,
+    #     position = glm.vec3(10, -4, -10), 
+    #     health = 1, 
+    #     speed = 3, 
+    #     spread = 0.1,
+    #     gun = Gun(
+    #         game = game,
+    #         count = 1,
+    #         capacity = 3,
+    #         spread = 0.05,
+    #         cooldown = 1,
+    #         ricochets = 1,
+    #         damage = 1,
+    #         radius = 0,
+    #         color  = 'red',
+    #     )
+    # )
     
-    gs.enemies.append(enemy)
+    # gs.enemies.append(enemy)
     gs.nodes.append(platform)
     gs.nodes += walls
     

@@ -53,3 +53,16 @@ class Bullet():
     def is_dead(self): return self.ricochet_remaining < 0
     @property
     def midpoint(self): return (self.position + self.last_hit) / 2
+    @property
+    def node(self): return self._node
+    @property
+    def path(self): return self._path
+    
+    @path.setter
+    def path(self, value):
+        self._path = glm.normalize(value)
+    
+    @node.setter
+    def node(self, value):
+        self._node = value
+        self._node.rotation = glm.angleAxis(glm.acos(glm.dot((0, 1, 0), self.path)), glm.cross(self.path, (0, 1, 0)))

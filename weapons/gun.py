@@ -19,8 +19,7 @@ class Gun():
             cylinder = Node(
                 position, 
                 scale = (radius, 0.01, radius),
-                mesh = self.game.cylinder_mesh,
-                rotation = glm.quatLookAt(path, (0, 1, 0))
+                mesh = self.game.cylinder_mesh
             )
             self.game.dimension_scene.add(cylinder)
             return Bullet(ricochets, damage, radius, color, cylinder, path, position)
