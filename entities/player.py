@@ -18,6 +18,8 @@ class Player(Entity):
         
         """
         self.node.rotation = glm.conjugate(glm.quatLookAt(glm.vec3(self.camera.forward.x, 0, self.camera.forward.z), self.camera.UP))
+        # self.game.player_gun.rotation = self.game.sight_scene.camera.rotation
+        # self.game.player_gun.position = self.node.position.data + glm.vec3(0, 1.5, 0)
         self.move()
         self.shoot(dt)
         
@@ -65,3 +67,34 @@ class Player(Entity):
         self._position = value
         self.node.position.data = self._position + glm.vec3(0, 1, 0)
         
+        
+def get_player_node() -> Node:
+    player_node = Node(
+        physics = True,
+        collision = True,
+        scale = (1, 2, 1),
+        tags = ['player'],
+        collision_group = 'entity'
+    )
+    
+    return player_node
+
+def get_player_gun() -> Node:
+    gun = Node(
+        scale = (0.1, 0.1, 0.1)
+    )
+    
+    barrel = Node(
+        position = (0.6, 0.25, -1),
+        scale = (0.1, 0.1, 1),
+    )
+    
+    muzzle = Node(
+        position = (0.6, 0.25, -1.5),
+        scale = (0.07, 0.07, 0.07)
+    )
+    
+    gun.add(barrel)
+    gun.add(muzzle)
+    
+    return gun

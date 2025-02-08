@@ -1,6 +1,6 @@
 import basilisk as bsk
 import glm
-from entities.player import Player
+from entities.player import Player, get_player_node, get_player_gun
 from entities.enemy_handler import EnemyHandler
 from weapons.bullet_handler import BulletHandler
 from weapons.gun import Gun
@@ -25,21 +25,10 @@ class Game():
         self.engine.scene = self.dimension_scene 
         
         # add player to scene
-        player_node = bsk.Node(
-            physics = True,
-            collision = True,
-            scale = (1, 2, 1),
-            tags = ['player'],
-            collision_group = 'entity'
-        )
+        player_node = get_player_node()
         
-        barrel = bsk.Node(
-            position = (0, 0, 0),
-            scale = (0.1, 0.1, 1),
-            # rotation = (1, 0, 0, 0)
-        )
-        
-        # player_node.add(barrel)
+        # self.player_gun = get_player_gun()
+        # self.sight_scene.add(self.player_gun)
         
         self.player = Player(
             position = glm.vec3(0, 0, 0), 
