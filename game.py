@@ -95,15 +95,14 @@ class Game():
 
         # self.dimension_scene.add(bsk.Node(scale=(3, 3, 3), position=(0, -3, 0)))
 
-        self.dimension_scene.add(bsk.Node(position=(6, -2.5, 0)))
-        self.dimension_scene.add(bsk.Node(position=(0, -2.5, 6)))
-        self.dimension_scene.add(bsk.Node(position=(6, -2.5, 6)))
+        # self.dimension_scene.add(bsk.Node(position=(6, -2.5, 0)))
+        # self.dimension_scene.add(bsk.Node(position=(0, -2.5, 6)))
+        # self.dimension_scene.add(bsk.Node(position=(6, -2.5, 6)))
 
-        self.sight_scene.add(bsk.Node(scale=(1, 1, 1), position=(-6, -3, -6)))
 
         # for x in range(-1, 2):
         #     for z in range(-1, 2):
-        #         self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh, scale=(1, 8, 1), position=(x * 5, 0, z * 5)))
+        #         self.dimension_scene.add(bsk.Node(mesh=self.cylinder_mesh, scale=(1, 8, 1), position=(x * 5, 8, z * 5)))
 
         while self.engine.running:
 
