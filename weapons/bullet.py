@@ -68,4 +68,4 @@ class Bullet():
     @node.setter
     def node(self, value):
         self._node = value
-        if self.node: self.node.rotation = glm.normalize(glm.angleAxis(glm.acos(glm.dot((0, 1, 0), self.path)), glm.cross(self.path, (0, 1, 0))))
+        if self.node: self.node.rotation = glm.normalize(glm.angleAxis(glm.pi() / 2, (1, 0, 0)) * glm.conjugate(glm.quatLookAt(self.path, (0, 1, 0))))
