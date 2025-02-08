@@ -8,7 +8,7 @@ from weapons.bullet import Bullet
 from scenes.game_scene import GameScene, get_plain_nodes
 from scenes.test_scene import test_scene
 from render.render_handler import RenderHandler
-import moderngl as mgl
+from ui.ui import UI
 
 
 class Game():
@@ -16,14 +16,17 @@ class Game():
     def __init__(self) -> None:
         self.engine = bsk.Engine()
 
+        self.default_scene = bsk.Scene()
         self.plain_scene = bsk.Scene()
         self.sight_scene = bsk.Scene()
         self.dimension_scene = bsk.Scene()
 
+        self.engine.scene = self.default_scene
         self.engine.scene = self.plain_scene
         self.engine.scene = self.sight_scene
         self.engine.scene = self.dimension_scene 
         
+        self.default_shader = self.engine.shader
         self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
         self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
         self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
@@ -68,11 +71,15 @@ class Game():
         self.sight_scene.camera = bsk.FollowCamera(player_node, offset=(0, 1, 0))
         self.plain_scene.camera = self.sight_scene.camera
         self.dimension_scene.camera = self.sight_scene.camera
+        self.default_scene.camera = self.sight_scene.camera
         self.sky = self.sight_scene.sky
         
         # add handlers
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler(self)
+
+        #UI
+        self.ui = UI(self)
 
     def load_meshes(self):
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
@@ -96,6 +103,8 @@ class Game():
         # dimensions scene
         self.dimension_scene.remove(*self.dimension_scene.nodes)
 
+        self.default_scene.add(bsk.Node(position=(0, 4, 0)))
+
     def start(self) -> None:
         """
         Starts the engine and the game
@@ -107,23 +116,17 @@ class Game():
         self.load_level(test_scene(self))
 
         while self.engine.running:
-
-            if self.engine.keys[bsk.pg.K_1]:
-                self.render_handler.show = self.render_handler.geometry
-            if self.engine.keys[bsk.pg.K_2]:
-                self.render_handler.show = self.render_handler.normals
-            if self.engine.keys[bsk.pg.K_3]:
-                self.render_handler.show = self.render_handler.dimensions
-
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
 
-            self.engine.scene = self.sight_scene
-            self.engine.update(render=False)
 
             self.render_handler.render()
 
+            self.engine.update(render=False)
+            bsk.pg.display.flip()
+
+bsk.Scene
 
 game = Game()
 game.start()

@@ -70,11 +70,11 @@ class BulletHandler():
             if not particle_position: return
             
             vec = origin - particle_position
-            for i in range(1, 5):
+            for i in range(1, 10):
                 self.sight_scene.particle.add(
                     position = particle_position + i * vec / 4,
                     material = self.materials[bullet.color],
-                    scale = 0.1,
+                    scale = 0.2,
                     life = 0.2
                 )
                 
