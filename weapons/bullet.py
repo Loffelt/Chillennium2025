@@ -3,7 +3,7 @@ import glm
 
 class Bullet():
     
-    def __init__(self, ricochet_remaining: int, damage: int, radius: float, path: glm.vec3, position: glm.vec3) -> None:
+    def __init__(self, ricochet_remaining: int, damage: int, radius: float, path: glm.vec3=None, position: glm.vec3=None) -> None:
         self.ricochet_remaining = ricochet_remaining
         self.damage = damage
         self.radius = radius
