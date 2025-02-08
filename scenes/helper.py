@@ -9,8 +9,8 @@ def rect_wall_nodes(centerx, centerz, width, depth, height) -> list[Node]:
         scale = (data[2], height, data[3]),
         collision = True 
     ) for data in (
-        (centerx + width, 0, 1, depth), 
-        (centerx - width, 0, 1, depth), 
-        (0, centerz + depth, width, 1), 
-        (0, centerz - depth, width, 1)
+        (centerx + width - 1, 0, 1, depth), 
+        (centerx - width + 1, 0, 1, depth), 
+        (0, centerz + depth - 1, width, 1), 
+        (0, centerz - depth + 1, width, 1)
     )]
