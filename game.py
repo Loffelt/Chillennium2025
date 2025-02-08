@@ -73,20 +73,12 @@ class Game():
         self.load_level(self.plain_scene, test_scene(self.player))
 
         while self.engine.running:
-            
-            if self.engine.keys[bsk.pg.K_1]:
-                self.engine.scene = self.plain_scene
-            if self.engine.keys[bsk.pg.K_2]:
-                self.engine.scene = self.sight_scene
-            if self.engine.keys[bsk.pg.K_3]:
-                self.engine.scene = self.dimension_scene
-
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
 
-            self.engine.update(render=True)
-            # self.render_handler.render()
+            self.engine.update(render=False)
+            self.render_handler.render()
 
 
 game = Game()

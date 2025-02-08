@@ -31,7 +31,7 @@ class RenderHandler:
 
         self.engine.ctx.screen.use()
         self.engine.ctx.clear()
-        self.normals.render()
+        self.geometry.render()
 
         pg.display.flip()
 
@@ -39,6 +39,8 @@ class RenderHandler:
         """
         
         """
+
+        self.engine.scene = self.game.plain_scene
 
         self.engine.shader = self.norm_shader
         self.game.plain_scene.render(self.normals)
