@@ -1,4 +1,5 @@
 import basilisk as bsk
+from render.render_handler import RenderHandler
 
 
 class Game:
@@ -7,10 +8,6 @@ class Game:
         self.engine = bsk.Engine()
         self.scene = bsk.Scene()
         self.engine.scene = self.scene
-
-    def load_shaders(self) -> None:
-        self.plain_shader = bsk.Shader(self.engine, vert="shaders/plain.vert", frag="shaders/plain.frag")
-        self.engine.shader = self.plain_shader
 
     def load_level(self) -> None:
         """
@@ -24,11 +21,13 @@ class Game:
         Starts the engine and the game
         """
         
-        self.load_shaders()
+        self.render_handler = RenderHandler(self)
+
         self.load_level()
 
         while self.engine.running:
-            self.engine.update()
+            self.engine.update(render=False)
+            self.render_handler.render()
 
 
 game = Game()
