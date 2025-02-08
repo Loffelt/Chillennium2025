@@ -29,5 +29,14 @@ class BulletHandler():
                 life = 0.2
             )
             
+            self.plain_scene.particle.add(
+                position = particle_position,
+                material = self.red,
+                scale = 1,
+                life = 0.2
+            )
+            
     @property
     def sight_scene(self) -> Scene: return self.game.sight_scene
+    @property
+    def plain_scene(self) -> Scene: return self.game.plain_scene
