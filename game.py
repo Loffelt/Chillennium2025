@@ -63,7 +63,7 @@ class Game:
         """
         
         self.render_handler = RenderHandler(self)
-        self.load_level(test_scene())
+        self.load_level(test_scene(self.player))
 
         while self.engine.running:
             

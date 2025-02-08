@@ -1,6 +1,7 @@
 from entities.enemy import Enemy
 from basilisk import Node
 
+
 class GameScene():
 
     def __init__(self) -> None:
