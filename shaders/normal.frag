@@ -52,14 +52,17 @@ vec3 getNormal(Material mtl, mat3 TBN){
 }
 
 uniform vec2 viewportDimensions;
+uniform sampler2D depthMap;
 
 void main() {
     // Get lighting vectors
     vec3 normal    = getNormal(mtl, TBN);
     vec2 uv = (gl_FragCoord.xy) / viewportDimensions;
 
+    vec4 depth_texture = texture(depthMap, uv);
+
     // Output fragment color
     fragColor = vec4(normal + gl_FragCoord.z / 20, 1.0);
     fragColor.rgb /= 10000;
-    fragColor.rg += uv;
+    fragColor.rgb += 20 - 20 * depth_texture.r;
 }
