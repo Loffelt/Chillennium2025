@@ -24,7 +24,8 @@ class Enemy(Entity):
             scale = (0.5, 2, 0.5),
             collision = True,
             tags = ['enemy'],
-            collision_group = 'entity'
+            collision_group = 'entity',
+            shader=game.invisible_shader
         )
         
         self.position = position # added after bc mistman is used in the position property

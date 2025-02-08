@@ -1,6 +1,7 @@
 import basilisk as bsk
 import pygame as pg
 import numpy as np
+import moderngl as mgl
 
 
 class RenderHandler:
@@ -37,6 +38,8 @@ class RenderHandler:
         self.normals.texture.use(location=2)
         self.norm_shader.program['depthMap'] = 3
         self.dimensions.depth.use(location=3)
+        self.game.particle_shader.program['depthMap'] = 4
+        self.dimensions.depth.use(location=4)
 
         self.show = self.geometry
 
@@ -49,6 +52,10 @@ class RenderHandler:
         self.game.plain_scene.particle.update()
         self.game.dimension_scene.node_handler.update()
         self.game.dimension_scene.particle.update()
+        self.game.sight_scene.node_handler.update()
+        self.game.sight_scene.particle.update()
+        if self.game.engine.delta_time < 0.5: # TODO this will cause physics to slow down when on low frame rate, this is probabl;y acceptable
+            self.game.sight_scene.collider_handler.resolve_collisions()
 
     def render(self) -> None:
         """
@@ -66,7 +73,7 @@ class RenderHandler:
         # Render the sight scene with the dimensions depth
         self.engine.scene = self.game.sight_scene
         self.engine.shader = self.norm_shader
-        self.game.sight_scene.sky = self.game.sky
+        self.game.sight_scene.sky = None
         self.game.sight_scene.render(self.normals)
 
         # Render plain
@@ -74,6 +81,7 @@ class RenderHandler:
         self.engine.shader = self.geo_shader
         self.game.plain_scene.sky = None
         self.game.plain_scene.render(self.geometry)
+
 
         # Show to the screen
         self.engine.ctx.screen.use()
@@ -85,5 +93,13 @@ class RenderHandler:
         self.output_shader.program['sightView'] = 2
         self.normals.texture.use(location=2)
         self.vao.render()
+        # Render ui
+        self.engine.ctx.disable(mgl.DEPTH_TEST)
+        self.engine.scene = self.game.default_scene
+        self.engine.shader = self.game.default_shader
+        self.game.ui.render()
+        self.game.default_scene.sky = None
+        self.game.default_scene.render()
+        self.engine.ctx.enable(mgl.DEPTH_TEST)
         # self.show.render()
-        pg.display.flip()
+        # pg.display.flip()
