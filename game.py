@@ -69,8 +69,8 @@ class Game:
             
             self.player.update(self.engine.delta_time)
             
-            self.engine.update(render=False)
-            self.render_handler.render()
+            self.engine.update(render=True)
+            # self.render_handler.render()
             
     @property
     def scene(self) -> bsk.Scene: return self.engine.scene

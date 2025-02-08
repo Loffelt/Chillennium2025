@@ -31,7 +31,7 @@ class RenderHandler:
 
         self.engine.ctx.screen.use()
         self.engine.ctx.clear()
-        self.geometry.render()
+        self.normals.render()
 
         pg.display.flip()
 
