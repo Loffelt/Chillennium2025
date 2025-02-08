@@ -7,5 +7,6 @@ class Entity():
         self.position = position
         self.health = health
         self.speed = speed
+
         
     def update(dt: float) -> None: ... # abstract function for children

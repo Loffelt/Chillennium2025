@@ -1,7 +1,8 @@
 import glm
-from .entity import Entity
-from .player import Player
-from ..weapons.gun import Gun
+from entities.entity import Entity
+from entities.player import Player
+from entities.mist_man import MistMan
+from weapons.gun import Gun
 
 
 class Enemy(Entity):
@@ -12,6 +13,7 @@ class Enemy(Entity):
         
         self.gun = gun
         self.player = player
+        self.mist = MistMan(self.position)
         
     def update(self, dt: float) -> None:
         """
@@ -24,7 +26,6 @@ class Enemy(Entity):
         """
         Main movement AI for enemies
         """
-        
         
     def shoot(self, dt: float) -> None:
         """

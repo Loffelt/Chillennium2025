@@ -1,4 +1,4 @@
-from .bullet import Bullet
+from weapons.bullet import Bullet
 import glm
 import random
 

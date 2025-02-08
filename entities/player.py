@@ -1,16 +1,16 @@
 import glm
 from basilisk import Node, Engine, pg, FollowCamera
-from .entity import Entity
-from ..weapons.gun import Gun
+from entities.entity import Entity
+from weapons.gun import Gun
 
 
 
 class Player(Entity):
     
     def __init__(self, position: glm.vec3, health: int, speed: float, gun: Gun, node: Node, engine: Engine) -> None:
+        self.node = node
         super().__init__(position, health, speed)
         
-        self.node = node
         self.engine = engine
         self.camera: FollowCamera = self.engine.scene.camera
 
@@ -40,4 +40,11 @@ class Player(Entity):
         if not self.engine.mouse.left_click: return
         self.gun.shoot(self.camera.forward)
         
+    @property
+    def position(self): return self._position
+    
+    @position.setter
+    def position(self, value):
+        self._position = value
+        self.node.position = value
         
