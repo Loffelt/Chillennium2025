@@ -82,6 +82,7 @@ class Game():
         self.enemy_handler.enemies = game_scene.enemies
         
         # dimensions scene
+        self.dimension_scene.remove(*self.dimension_scene.nodes)
 
     def start(self) -> None:
         """

@@ -1,9 +1,9 @@
 import glm
-from basilisk import Node, Scene
+from basilisk import Node
 from scenes.game_scene import GameScene
 from entities.enemy import Enemy
 from weapons.gun import Gun
-from weapons.bullet import Bullet
+from scenes.helper import rect_wall_nodes
 
 
 def test_scene(game) -> GameScene:
@@ -15,11 +15,13 @@ def test_scene(game) -> GameScene:
         collision = True
     )
     
-    walls = [Node(
-        position = (data[0], 5, data[1]), 
-        scale = (data[2], 10, data[3]),
-        collision = True 
-    ) for data in ((20, 0, 1, 20), (-20, 0, 1, 20), (0, 20, 20, 1), (0, -20, 20, 1))]
+    box = Node(
+        position=(1, 2, 3),
+        physics=True,
+        collision=True
+    )
+    
+    walls = rect_wall_nodes(5, 0, 20, 20, 10)
     
     enemy = Enemy(
         game = game,
