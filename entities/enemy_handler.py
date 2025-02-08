@@ -35,11 +35,11 @@ class EnemyHandler():
             self.scene.particle.add(
                 position = particle_position,
                 material = self.red,
-                scale = random.uniform(0.2, 0.4),
+                scale = random.uniform(0.4, 0.6),
                 life = 0.2,
             )
             
         for enemy in to_remove: del enemy
         
     @property
-    def scene(self) -> Scene: return self.game.scene
+    def scene(self) -> Scene: return self.game.sight_scene
