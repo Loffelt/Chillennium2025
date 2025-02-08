@@ -31,7 +31,6 @@ class RenderHandler:
         self.engine.ctx.clear()
 
         self.engine.shader = self.geo_shader
-        self.engine.shader = self.norm_shader
         self.geometry.render()
 
         pg.display.flip()
