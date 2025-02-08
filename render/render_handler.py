@@ -63,7 +63,7 @@ class RenderHandler:
 
         # Render the sight scene with the dimensions depth
         self.norm_shader.program['depthMap'] = 0
-        self.dimensions.depth.use(location=0)
+        self.dimensions.texture.use(location=0)
         self.engine.scene = self.game.sight_scene
         self.engine.shader = self.norm_shader
         self.game.sight_scene.sky = self.game.sky
