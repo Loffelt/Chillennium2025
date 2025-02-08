@@ -26,6 +26,9 @@ class RenderHandler:
         self.plain = bsk.Framebuffer(self.engine)
         self.sight = bsk.Framebuffer(self.engine)
 
+        # Post processes
+        self.edge_detect = bsk.PostProcess(self.engine, 'shaders/edge_detect.frag')
+
         # Output vao        
         self.vbo = self.engine.ctx.buffer(np.array([[-1, -1, 0, 0, 0], [1, -1, 0, 1, 0], [1, 1, 0, 1, 1], [-1, 1, 0, 0, 1], [-1, -1, 0, 0, 0], [1, 1, 0, 1, 1]], dtype='f4'))
         self.vao = self.engine.ctx.vertex_array(self.output_shader.program, [(self.vbo, '3f 2f', 'in_position', 'in_uv')], skip_errors=True)
@@ -75,6 +78,7 @@ class RenderHandler:
         self.engine.shader = self.norm_shader
         self.game.sight_scene.sky = None
         self.game.sight_scene.render(self.normals)
+        self.edge_detect.apply(self.normals, self.plain)
 
         # Render plain
         self.engine.scene = self.game.plain_scene
@@ -89,7 +93,7 @@ class RenderHandler:
         self.output_shader.program['dimensionMap'] = 0
         self.dimensions.texture.use(location=0)
         self.output_shader.program['plainView'] = 1
-        self.geometry.texture.use(location=1)
+        self.plain.texture.use(location=1)
         self.output_shader.program['sightView'] = 2
         self.normals.texture.use(location=2)
         self.vao.render()

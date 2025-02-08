@@ -92,8 +92,6 @@ class Game():
         # dimensions scene
         self.dimension_scene.remove(*self.dimension_scene.nodes)
 
-        self.default_scene.add(bsk.Node(position=(0, 4, 0)))
-
     def start(self) -> None:
         """
         Starts the engine and the game
