@@ -6,12 +6,11 @@ from weapons.gun import Gun
 
 class Player(Entity):
     
-    def __init__(self, position: glm.vec3, health: int, speed: float, gun: Gun, node: Node, engine: Engine) -> None:
+    def __init__(self, position: glm.vec3, health: int, speed: float, gun: Gun, node: Node, game) -> None:
         self.node = node
         super().__init__(position, health, speed)
         
-        self.engine = engine
-
+        self.game = game
         self.gun = gun
         
     def update(self, dt: float) -> None:
@@ -44,12 +43,18 @@ class Player(Entity):
         """
         self.gun.update(dt)
         if not self.engine.mouse.left_click: return
-        self.gun.shoot(self.camera.forward)
+        
+        bullets = self.gun.shoot(self.camera.position, self.camera.forward)
+        if not bullets: return
+        
+        self.game.bullet_handler.bullets += bullets
         
     @property
     def position(self): return self._position
     @property
-    def camera(self): return self.engine.scene.camera
+    def camera(self) -> FollowCamera: return self.game.sight_scene.camera
+    @property
+    def engine(self) -> Engine: return self.game.engine
     
     @position.setter
     def position(self, value):

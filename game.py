@@ -44,7 +44,7 @@ class Game():
                 )
             ),
             node = player_node,
-            engine = self.engine
+            game = self
         )
         
         self.plain_scene.add(player_node)
@@ -52,7 +52,7 @@ class Game():
         
         # add handlers
         self.enemy_handler = EnemyHandler(self)
-        self.bullet_handler = BulletHandler()
+        self.bullet_handler = BulletHandler(self)
 
     def load_level(self, scene: bsk.Scene, game_scene: GameScene) -> None:
         """
