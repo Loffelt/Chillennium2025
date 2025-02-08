@@ -9,4 +9,9 @@ class Entity():
         self.speed = speed
 
         
-    def update(dt: float) -> None: ... # abstract function for children
+    def update(self, dt: float) -> None: ... # abstract function for children
+    
+    def on_death(self) -> None: ...
+    
+    @property
+    def is_dead(self): return self.health <= 0
