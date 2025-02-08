@@ -51,7 +51,7 @@ class Game():
         self.plain_scene.camera = bsk.FollowCamera(player_node)
         
         # add handlers
-        self.enemy_handler = EnemyHandler(self.engine)
+        self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler()
 
     def load_level(self, scene: bsk.Scene, game_scene: GameScene) -> None:
