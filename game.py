@@ -3,7 +3,8 @@ import glm
 from entities.player import Player
 from weapons.gun import Gun
 from weapons.gun import Bullet
-from scenes.test_scene import test_scenefrom render.render_handler import RenderHandler
+from scenes.test_scene import test_scene
+from render.render_handler import RenderHandler
 
 
 class Game:
@@ -29,7 +30,8 @@ class Game:
         self.load_level()
 
         while self.engine.running:
-            self.engine.update()
+            self.engine.update(render=False)
+            self.render_handler.render()
             
     def replace_nodes(self, nodes: list[bsk.Node]) -> None:
         self.scene.add(*nodes)
