@@ -2,6 +2,7 @@ import basilisk as bsk
 
 
 class Game:
+    
     def __init__(self) -> None:
         self.engine = bsk.Engine()
         self.scene = bsk.Scene()
