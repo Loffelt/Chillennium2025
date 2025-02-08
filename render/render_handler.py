@@ -12,15 +12,18 @@ class RenderHandler:
 
         self.default_shader = self.engine.shader
         # Shaders
-        self.dim_shader    = bsk.Shader(self.engine, vert='shaders/dim.vert',      frag='shaders/dim.frag')
-        self.geo_shader    = bsk.Shader(self.engine, vert='shaders/geometry.vert', frag='shaders/geometry.frag')
-        self.norm_shader   = bsk.Shader(self.engine, vert='shaders/normal.vert',   frag='shaders/normal.frag')
-        self.output_shader = bsk.Shader(self.engine, vert='shaders/output.vert',   frag='shaders/output.frag')
+        self.sight_shader  = bsk.Shader(self.engine, vert='shaders/sight_prepass.vert', frag='shaders/sight_prepass.frag')
+        self.dim_shader    = bsk.Shader(self.engine, vert='shaders/dim.vert',           frag='shaders/dim.frag')
+        self.geo_shader    = bsk.Shader(self.engine, vert='shaders/geometry.vert',      frag='shaders/geometry.frag')
+        self.norm_shader   = bsk.Shader(self.engine, vert='shaders/normal.vert',        frag='shaders/normal.frag')
+        self.output_shader = bsk.Shader(self.engine, vert='shaders/output.vert',        frag='shaders/output.frag')
 
         # First render pass
-        self.geometry   = bsk.Framebuffer(self.engine)
-        self.normals    = bsk.Framebuffer(self.engine)
-        self.dimensions = bsk.Framebuffer(self.engine)
+        self.sight_prepass = bsk.Framebuffer(self.engine)
+        self.edge_sight    = bsk.Framebuffer(self.engine)
+        self.geometry      = bsk.Framebuffer(self.engine)
+        self.normals       = bsk.Framebuffer(self.engine)
+        self.dimensions    = bsk.Framebuffer(self.engine)
 
         # Level destinations
         self.plain = bsk.Framebuffer(self.engine)
@@ -29,6 +32,9 @@ class RenderHandler:
         # Post processes
         self.edge_detect = bsk.PostProcess(self.engine, 'shaders/edge_detect.frag')
 
+        # Skys
+        self.white_sky = bsk.Sky(self.engine, 'images/white.jpg')
+
         # Output vao        
         self.vbo = self.engine.ctx.buffer(np.array([[-1, -1, 0, 0, 0], [1, -1, 0, 1, 0], [1, 1, 0, 1, 1], [-1, 1, 0, 0, 1], [-1, -1, 0, 0, 0], [1, 1, 0, 1, 1]], dtype='f4'))
         self.vao = self.engine.ctx.vertex_array(self.output_shader.program, [(self.vbo, '3f 2f', 'in_position', 'in_uv')], skip_errors=True)
@@ -36,10 +42,11 @@ class RenderHandler:
         self.output_shader.program['dimensionMap'] = 0
         self.dimensions.texture.use(location=0)
         self.output_shader.program['plainView'] = 1
-        self.geometry.texture.use(location=1)
+        self.plain.texture.use(location=1)
         self.output_shader.program['sightView'] = 2
-        self.normals.texture.use(location=2)
-        self.norm_shader.program['depthMap'] = 3
+        self.sight_prepass.texture.use(location=2)
+
+        self.sight_shader.program['depthMap'] = 3
         self.dimensions.depth.use(location=3)
         self.game.particle_shader.program['depthMap'] = 4
         self.dimensions.depth.use(location=4)
@@ -73,18 +80,26 @@ class RenderHandler:
         self.game.dimension_scene.sky = None
         self.game.dimension_scene.render(self.dimensions)
 
-        # Render the sight scene with the dimensions depth
-        self.engine.scene = self.game.sight_scene
+        # Render the normals
+        self.engine.scene = self.game.plain_scene
         self.engine.shader = self.norm_shader
-        self.game.sight_scene.sky = None
-        self.game.sight_scene.render(self.normals)
+        self.game.plain_scene.render(self.normals)
         self.edge_detect.apply(self.normals, self.plain)
 
-        # Render plain
-        self.engine.scene = self.game.plain_scene
-        self.engine.shader = self.geo_shader
-        self.game.plain_scene.sky = None
-        self.game.plain_scene.render(self.geometry)
+        # Render the sight scene with the dimensions depth
+        self.engine.scene = self.game.sight_scene
+        self.engine.shader = self.sight_shader
+        self.game.plain_scene.sky = self.white_sky
+        self.game.sight_scene.render(self.sight_prepass)
+
+        # Edge detect on plain/sight barrier
+        # self.edge_detect.apply(self.dimensions, self.plain)
+
+        # # Render plain
+        # self.engine.scene = self.game.plain_scene
+        # self.engine.shader = self.geo_shader
+        # self.game.plain_scene.sky = None
+        # self.game.plain_scene.render(self.geometry)
 
 
         # Show to the screen
@@ -95,8 +110,9 @@ class RenderHandler:
         self.output_shader.program['plainView'] = 1
         self.plain.texture.use(location=1)
         self.output_shader.program['sightView'] = 2
-        self.normals.texture.use(location=2)
+        self.sight_prepass.texture.use(location=2)
         self.vao.render()
+        
         # Render ui
         self.engine.ctx.disable(mgl.DEPTH_TEST)
         self.engine.scene = self.game.default_scene
