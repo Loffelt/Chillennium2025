@@ -33,6 +33,12 @@ class Game():
             collision_group = 'entity'
         )
         
+        # barrel = bsk.Node(
+        #     position = (0, 0, 0),
+        #     scale = (1, 1, 1),
+        #     rotation = (1, 0, 0, 0)
+        # )
+        
         self.player = Player(
             position = glm.vec3(0, 0, 0), 
             health = 3,
