@@ -21,7 +21,7 @@ def test_scene(game) -> GameScene:
         collision=True
     )
     
-    walls = rect_wall_nodes(5, 0, 20, 20, 10)
+    walls = rect_wall_nodes(0, 0, 20, 20, 10)
     
     enemy = Enemy(
         game = game,

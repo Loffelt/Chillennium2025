@@ -1,6 +1,7 @@
 import glm
 from basilisk import Node
 from scenes.game_scene import GameScene
+from scenes.helper import rect_wall_nodes
 from entities.enemy import Enemy
 from weapons.gun import Gun
 
@@ -14,4 +15,5 @@ def level1(game) -> GameScene:
         scale = (15, 1, 25)
     ))
     
-    # walls = 
+    # walls
+    # gs.nodes += 
