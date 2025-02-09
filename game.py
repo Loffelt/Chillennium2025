@@ -37,7 +37,7 @@ class Game():
         self.load_meshes()
         self.load_materials()
         
-        self.levels = [level1, level2, level3, level4, level5, level6, level7]
+        self.levels = [level4, level2, level3, level4, level5, level6, level7]
 
         self.pistol = Gun(
             game = self,
@@ -196,6 +196,9 @@ class Game():
         self.sight_scene.camera.pitch = 0
 
     def load_materials(self):
+
+        self.e_key = bsk.Image('images/e_key.png')
+
         saturation = 80
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
@@ -236,9 +239,16 @@ class Game():
             is_looking_at_gun = False
             if len(self.gun_nodes) > 0:
                 cast = self.sight_scene.raycast(self.sight_scene.camera.position + self.sight_scene.camera.forward * 2, self.sight_scene.camera.forward)
-                if cast.node and any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]): is_looking_at_gun = True
+                if cast.node and any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]) and glm.length(cast.position - self.player.camera.position) < 5: is_looking_at_gun = True
             
-            print('looking at gun:', is_looking_at_gun)
+            if is_looking_at_gun:
+                box_w, box_h = 80, 80
+                outline_w, outline_h = 84, 84
+                win_w, win_h = self.engine.win_size
+                rect = (win_w // 2 - box_w // 2, win_h - box_h - 10, box_w, box_h)
+                rect_outline = (win_w // 2 - outline_w // 2, win_h - outline_h - 8, outline_w, outline_h)
+                bsk.draw.blit(self.engine, self.e_key, rect)
+                bsk.draw.rect(self.engine, 0, rect_outline)
 
             if self.engine.event_resize: self.render_handler.resize()
 
