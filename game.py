@@ -47,7 +47,7 @@ class Game():
                 capacity = 7,
                 cooldown = 0.2,
                 spread = 0.02,
-                ricochets = 1,
+                ricochets = 10,
                 damage = 1,
                 radius = 0.5,
                 color  = 'black',
