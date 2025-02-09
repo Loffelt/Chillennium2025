@@ -95,22 +95,65 @@ def level5(game) -> GameScene:
         for z in range(-1, 2, 2):
             
             gs.nodes.append(Node(
-                position = (x * 15, 1.5, z * 15 - 20),
+                position = (x * 15, 1, z * 15 - 20),
                 scale = (5, 3, 5),
-                collision = True
+                collision = True,
+                material = game.cyan
             ))
             
             gs.enemies.append(Enemy(
                 game,
-                glm.vec3(x * 15, 3, z * 15 - 20),
+                glm.vec3(x * 15, 2, z * 15 - 20),
                 ai=None
             ))
+            
+    for x in range(-5, 5, 3):
+        gs.enemies.append(Enemy(
+                game,
+                glm.vec3(x, 0, -15),
+                ai='smart'
+            ))
+            
+    return gs
+
+###############################################################################
+def level6(game) -> GameScene:
+    gs = GameScene()
+    
+    gs.nodes += rect_room(0, -15, 20, 30, 10, game)
+    
+    gs.nodes.append(Node(
+        position = (0, 1.5, -15),
+        scale = (20, 5, 3),
+        collision=True,
+        material=game.yellow
+    ))
+    
+    gs.nodes.append(Node(
+        position = (-5, 5, -7),
+        scale = (2, 2, 2),
+        collision = True,
+        physics = True,
+        material = game.cyan
+    ))
+    
+    gs.guns.append(('shotgun', glm.vec3(1, 7, -15)))
+    
+    dummy = Enemy(
+        game, 
+        glm.vec3(-5, 0, -10),
+        ai=None
+    )
+    
+    dummy.gun.cooldown = 1e8
+    
+    gs.enemies.append(dummy)
             
     return gs
 
     
 ###############################################################################
-def level6(game) -> GameScene:
+def level7(game) -> GameScene:
     gs = GameScene()
     
     gs.nodes += rect_room(0, -15, 20, 20, 10, game)
