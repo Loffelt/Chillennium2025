@@ -7,8 +7,8 @@ class UI:
     """"""
     def __init__(self, game):
         self.game = game
-
         self.transitions = []
+        self.transition_card = bsk.Image('images/transition_card.png')
 
     def render(self):
         # Cross
@@ -20,10 +20,12 @@ class UI:
         while i < len(self.transitions):
             transition = self.transitions[i]
             transition.render()
-            if not transition.running: self.transitions.remove(transition)
+            if not transition.running:
+                if transition.callback: transition.callback()
+                self.transitions.remove(transition)
             i += 1
 
         
 
-    def add_transition(self, duration: float=1.0):
-        self.transitions.append(Transition(self.game.engine, duration))
+    def add_transition(self, duration: float=1.0, callback=None):
+        self.transitions.append(Transition(self, duration, callback))
