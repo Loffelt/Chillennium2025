@@ -36,6 +36,7 @@ class Game():
         self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
         
         self.load_meshes()
+        self.load_materials()
         
         self.levels = [level1]
 
@@ -104,7 +105,6 @@ class Game():
         self.sky = self.sight_scene.sky
         
         # add handlers
-        self.load_materials()
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler(self)
 
@@ -114,7 +114,7 @@ class Game():
     def load_meshes(self):
         self.pistol_mesh = bsk.Mesh('meshes/pistol.obj')
         self.wedge_mesh = bsk.Mesh('meshes/wedge.obj')
-        self.health_cube = bsk.Mesh('meshes/health_cube.obj')
+        self.health_cube_mesh = bsk.Mesh('meshes/health_cube.obj')
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
 
     def load_level(self, game_scene: GameScene) -> None:
@@ -191,6 +191,9 @@ class Game():
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1]:
                 self.ui.add_transition()
                 self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(self.next_level()(self)))
+
+            if self.engine.keys[bsk.pg.K_2] and not self.engine.previous_keys[bsk.pg.K_2]:
+                self.player.health -= 1
 
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
