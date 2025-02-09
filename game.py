@@ -23,10 +23,10 @@ class Game():
         self.sight_scene = bsk.Scene()
         self.dimension_scene = bsk.Scene()
 
-        self.engine.scene = self.default_scene
         self.engine.scene = self.plain_scene
         self.engine.scene = self.sight_scene
         self.engine.scene = self.dimension_scene 
+        self.engine.scene = self.default_scene
         
         self.sight_scene.physics_engine.accelerations = [glm.vec3(0, -25, 0)]
         
@@ -38,7 +38,7 @@ class Game():
         self.load_meshes()
         
         self.levels = [level1]
-        
+
         self.pistol = Gun(
             game = self,
             count = 1,
@@ -114,6 +114,7 @@ class Game():
     def load_meshes(self):
         self.pistol_mesh = bsk.Mesh('meshes/pistol.obj')
         self.wedge_mesh = bsk.Mesh('meshes/wedge.obj')
+        self.health_cube = bsk.Mesh('meshes/health_cube.obj')
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
 
     def load_level(self, game_scene: GameScene) -> None:
