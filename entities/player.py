@@ -66,7 +66,7 @@ class Player(Entity):
         else: self.game.sight_scene.camera.offest = glm.vec3(0, 1, 0)
         
     def pick(self) -> None:
-        if not self.engine.mouse.right_click: return
+        if not (self.game.engine.keys[pg.K_e] and not self.game.engine.previous_keys[pg.K_e]): return
         cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)
         if not cast.node or not any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]): return
         if glm.length(self.camera.position - cast.position) > 5: return

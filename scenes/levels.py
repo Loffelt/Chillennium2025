@@ -107,13 +107,6 @@ def level5(game) -> GameScene:
                 ai=None
             ))
             
-    for x in range(-5, 5, 3):
-        gs.enemies.append(Enemy(
-                game,
-                glm.vec3(x, 0, -15),
-                ai='smart'
-            ))
-            
     return gs
 
 ###############################################################################
@@ -128,6 +121,12 @@ def level6(game) -> GameScene:
         collision=True,
         material=game.yellow
     ))
+    gs.nodes.append(Node(
+        position = (0, 1, -17),
+        scale = (5, 2, 3),
+        collision=True,
+        material=game.green
+    ))
     
     gs.nodes.append(Node(
         position = (-5, 5, -7),
@@ -139,7 +138,7 @@ def level6(game) -> GameScene:
     
     gs.guns.append(('shotgun', glm.vec3(1, 7, -15)))
     
-    for x in range(-5, 5, 3):
+    for x in range(-3, 3, 2):
         gs.enemies.append(Enemy(
             game,
             glm.vec3(x, 0, -25),
