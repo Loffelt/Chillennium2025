@@ -52,6 +52,7 @@ class Enemy(Entity):
         self.game.sight_scene.add(self.node)
         
         self.position = position # added after bc mistman is used in the position property
+        self.y = self.position.y
         
     def update(self, dt: float) -> None:
         """
@@ -67,7 +68,7 @@ class Enemy(Entity):
         if glm.length2(direction) < 1e-7: return
         direction = glm.normalize(direction)
         
-        self.node.position.data.y = 2
+        self.node.position.data.y = self.y + 2
         self.node.velocity.y = 0
         self.node.rotation.data = (1, 0, 0, 0)
         
@@ -86,7 +87,7 @@ class Enemy(Entity):
             direction = glm.normalize(direction)
             self.mist.forward = direction
             
-            self.node.position.data += self.speed * dt * direction
+            self.node.velocity = self.speed * direction
             
         elif self.ai == 'smart':
             direction = self.player.position - self.position
@@ -96,7 +97,7 @@ class Enemy(Entity):
             direction = glm.normalize(direction)
             self.mist.forward = direction
             if distance < 15: direction *= -1
-            self.node.position.data += self.speed * dt * direction
+            self.node.velocity = self.speed * direction
         
     def shoot(self, dt: float) -> None:
         """
@@ -114,4 +115,4 @@ class Enemy(Entity):
     def position(self, value):
         self._position = value
         self.mist.position = value
-        self.node.position = value + glm.vec3(0, 1, 0)
+        # self.node.position.data = value + glm.vec3(0, 1, 0)

@@ -6,7 +6,7 @@ from weapons.bullet_handler import BulletHandler
 from weapons.gun import Gun
 from weapons.bullet import Bullet
 from scenes.game_scene import GameScene, get_plain_nodes
-from scenes.levels import level1, level2, level3
+from scenes.levels import *
 from render.render_handler import RenderHandler
 from ui.ui import UI
 # import cudart
@@ -37,7 +37,7 @@ class Game():
         self.load_meshes()
         self.load_materials()
         
-        self.levels = [level1, level2, level3]
+        self.levels = [level5, level2, level3, level4]
 
         self.pistol = Gun(
             game = self,
@@ -107,6 +107,7 @@ class Game():
         # add handlers
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler(self)
+        self.gun_nodes = []
 
         #UI
         self.ui = UI(self)
@@ -121,9 +122,9 @@ class Game():
             
         hitbox = bsk.Node(
             scale=(0.5, 0.5, 0.5),
-            position=position,
-            physics=True,
+            position=glm.vec3(position),
             collision=True,
+            # physics=True,
             shader=game.invisible_shader,
             tags=[type]
         )
@@ -133,10 +134,13 @@ class Game():
             scale=(0.1, 0.1, 0.1),
             material=game.blue,
             mesh=mesh,
-            tags=[type]
+            tags=[type],
         )
         
-        hitbox.add(gun)
+        self.gun_nodes.append(gun)
+        self.gun_nodes.append(hitbox)
+        
+        self.default_scene.add(gun)
         self.sight_scene.add(hitbox)
 
     def load_meshes(self):
@@ -163,15 +167,16 @@ class Game():
         """ 
         self.level_complete = False
         
+        for i in range(0, len(self.gun_nodes), 2): self.default_scene.remove(self.gun_nodes[i])
+        self.gun_nodes = []
+        
         # plain scene
         self.plain_scene.remove(*self.plain_scene.nodes)
         self.plain_scene.add(*get_plain_nodes(game_scene))
         
         # sight scene
-        nodes = self.sight_scene.nodes[:]
-        nodes.remove(self.player.node)
-        self.sight_scene.remove(*nodes)
-        self.sight_scene.add(*game_scene.nodes)
+        self.sight_scene.remove(*self.sight_scene.node_handler.nodes)
+        self.sight_scene.add(*game_scene.nodes, self.player.node)
         for enemy in game_scene.enemies: self.sight_scene.add(enemy.node)
         
         self.bullet_handler.bullets = []
@@ -182,6 +187,8 @@ class Game():
         self.dimension_scene.remove(*self.dimension_scene.nodes)
         for gun in game_scene.guns:
             self.spawn_gun(*gun)
+            
+        
         
         self.player.position = glm.vec3(0, 1, 0)
         self.player.health = self.player.max_health
@@ -193,7 +200,7 @@ class Game():
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
-        self.yellow = bsk.Material(color=(255, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
+        self.yellow = bsk.Material(color=(255, 255, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.cyan = bsk.Material(color=(saturation, 255, 255), roughness=.8, metallicness=0.0, specular=0.25)
         self.white = bsk.Material(color=(255, 255, 255))
         self.black = bsk.Material(color=(30, 30, 30))
@@ -210,7 +217,7 @@ class Game():
             scene.material_handler.add(self.black)
             scene.material_handler.add(self.purple)
 
-        self.materials = [self.green, self.blue, self.purple, self.cyan, self.yellow]
+        self.materials = [self.green, self.purple, self.cyan, self.yellow]
 
     def start(self) -> None:
         """
@@ -222,6 +229,9 @@ class Game():
         self.load_level(self.levels[0](self))
 
         while self.engine.running:
+            
+            for i in range(0, len(self.gun_nodes), 2):
+                self.gun_nodes[i].position.data = self.gun_nodes[i + 1].position.data + (0.2, 0, 0)
 
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1] or len(self.enemy_handler.enemies) < 1 and not self.level_complete:
                 self.levels.pop(0)
