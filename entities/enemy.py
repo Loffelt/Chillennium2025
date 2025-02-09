@@ -18,6 +18,7 @@ class Enemy(Entity):
         self.game = game
         self.player: Player = game.player
         self.mist = MistMan(position)
+        
         self.node = Node(
             position + (0, 1, 0),
             mesh = self.player.game.cylinder_mesh,
@@ -28,6 +29,11 @@ class Enemy(Entity):
             shader=game.invisible_shader
         )
         
+        self.gun_node = Node(
+            scale = (0.1, 0.1, 0.7)
+        )
+        
+        self.game.sight_scene.add(self.gun_node)
         self.game.sight_scene.add(self.node)
         
         self.position = position # added after bc mistman is used in the position property
@@ -41,6 +47,12 @@ class Enemy(Entity):
         
         # mist control
         self.mist.update(dt)
+        
+        direction = self.game.player.position - self.position
+        if glm.length2(direction) < 1e-7: return
+        direction = glm.normalize(direction)
+        self.gun_node.position = self.mist.chest + direction * 2
+        self.gun_node.rotation = glm.conjugate(glm.quatLookAt(direction, (0, 1, 0)))
         
     def move(self, dt: float) -> None:
         """

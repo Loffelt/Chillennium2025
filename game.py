@@ -67,6 +67,7 @@ class Game():
         self.sky = self.sight_scene.sky
         
         # add handlers
+        self.load_materials()
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler(self)
 
@@ -97,7 +98,7 @@ class Game():
 
     def load_materials(self):
         saturation = 80
-        self.red = bsk.Material(color=(255, saturation, saturation), roughness=.8, metallicness=0.0, specular=0.25)
+        self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
 
@@ -107,7 +108,6 @@ class Game():
         """
         
         self.render_handler = RenderHandler(self)
-        self.load_materials()
         self.load_meshes()
         
         self.load_level(test_scene(self))

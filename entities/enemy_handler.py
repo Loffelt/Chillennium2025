@@ -1,7 +1,7 @@
 import glm
 import random
 from entities.enemy import Enemy
-from basilisk import Material, Scene, pg
+from basilisk import Scene, pg
 from weapons.gun import Gun
 
 
@@ -10,7 +10,6 @@ class EnemyHandler():
     def __init__(self, game) -> None:
         self.game = game
         self.enemies: list[Enemy] = []
-        self.red = Material(color = (255, 0, 0))
         
     def update(self, dt: float) -> None:
         """
@@ -33,20 +32,19 @@ class EnemyHandler():
             if not particle_position: continue
             self.sight_scene.particle.add(
                 position = particle_position,
-                material = self.red,
+                material = self.game.red,
                 scale = random.uniform(.8, 1.2),
                 life = 0.2,
-
             )
             
         for enemy in to_remove:
             self.enemies.remove(enemy)
-            self.game.sight_scene.remove(enemy.node)
+            self.game.sight_scene.remove(enemy.node, enemy.gun_node)
         
         if self.game.engine.keys[pg.K_e] and not self.game.engine.previous_keys[pg.K_e]:
             self.enemies.append(Enemy(
                 game = self.game,
-                position = glm.vec3([random.uniform(-7, 7) for _ in range(3)]),
+                position = glm.vec3([random.uniform(-7, 7), 0, random.uniform(-7, 7)]),
                 health = 1,
                 speed = 3, 
                 spread = 0.1,
