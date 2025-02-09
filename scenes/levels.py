@@ -19,14 +19,9 @@ def level1(game) -> GameScene:
     
     for enemy in gs.enemies: enemy.gun.cooldown = 1e8
     
-    box = Node(
-        position=(1, 5, -25),
-        physics=True,
-        collision=True,
-        material=game.blue
-    )
-    
-    gs.nodes.append(box)
+    gs.guns.append(('shotgun', glm.vec3(1, 5, -25)))
+    gs.guns.append(('pistol', glm.vec3(1, 5, -20)))
+    gs.guns.append(('smg', glm.vec3(1, 5, -15)))
     
     return gs
 

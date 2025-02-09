@@ -12,7 +12,7 @@ from ui.ui import UI
 # import cudart
 
 
-class Game():
+class Game():  
     
     def __init__(self) -> None:
         self.engine = bsk.Engine()
@@ -37,7 +37,7 @@ class Game():
         self.load_meshes()
         self.load_materials()
         
-        self.levels = [level1, level2]
+        self.levels = [level1, level2, level3]
 
         self.pistol = Gun(
             game = self,
@@ -65,7 +65,7 @@ class Game():
             owner = 'player'
         )
         
-        self.submachine = Gun(
+        self.smg = Gun(
             game = self,
             count = 1,
             capacity = 3,
@@ -109,6 +109,34 @@ class Game():
 
         #UI
         self.ui = UI(self)
+        
+    def spawn_gun(self, type: str, position: glm.vec3):
+        
+        mesh = None
+        match type:
+            case 'pistol': mesh = self.pistol_mesh
+            case 'shotgun': mesh = self.shotgun_mesh
+            case 'smg': mesh = self.smg_mesh
+            
+        hitbox = bsk.Node(
+            scale=(0.5, 0.5, 0.5),
+            position=position,
+            physics=True,
+            collision=True,
+            shader=game.invisible_shader,
+            tags=[type]
+        )
+        
+        gun = bsk.Node(
+            position=position + (0.2, 0, 0),
+            scale=(0.1, 0.1, 0.1),
+            material=game.blue,
+            mesh=mesh,
+            tags=[type]
+        )
+        
+        hitbox.add(gun)
+        self.sight_scene.add(hitbox)
 
     def load_meshes(self):
         self.pistol_mesh = bsk.Mesh('meshes/pistol.obj')
@@ -151,6 +179,8 @@ class Game():
         
         # dimensions scene
         self.dimension_scene.remove(*self.dimension_scene.nodes)
+        for gun in game_scene.guns:
+            self.spawn_gun(*gun)
         
         self.player.position = glm.vec3(0, 1, 0)
         self.player.health = self.player.max_health

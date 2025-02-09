@@ -34,11 +34,12 @@ class Enemy(Entity):
         self.node = Node(
             position + (0, 1, 0),
             mesh = self.player.game.cylinder_mesh,
-            scale = (0.5, 2, 0.5),
+            scale = (0.5, 1.8, 0.5),
             collision = True,
+            physics = True,
             tags = ['enemy'],
             collision_group = 'entity',
-            shader=game.invisible_shader
+            # shader=game.invisible_shader
         )
         
         self.gun_node = Node(
@@ -66,6 +67,12 @@ class Enemy(Entity):
         if glm.length2(direction) < 1e-7: return
         direction = glm.normalize(direction)
         
+        self.node.position.data.y = 2
+        self.node.velocity.y = 0
+        self.node.rotation.data = (1, 0, 0, 0)
+        
+        self.position = self.node.position.data - glm.vec3(0, 1, 0)
+        
         # self.gun_node.position = self.mist.chest + direction * 2
         # self.gun_node.rotation = glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * glm.conjugate(glm.quatLookAt(direction, (0, 1, 0)))
         
@@ -79,16 +86,17 @@ class Enemy(Entity):
             direction = glm.normalize(direction)
             self.mist.forward = direction
             
-            self.position += self.speed * dt * direction
+            self.node.position.data += self.speed * dt * direction
             
         elif self.ai == 'smart':
             direction = self.player.position - self.position
+            direction = glm.vec3(direction.x, 0, direction.y)
             distance = glm.length(direction)
             if distance < 1e-7: return
             direction = glm.normalize(direction)
             self.mist.forward = direction
             if distance < 15: direction *= -1
-            self.position += self.speed * dt * direction
+            self.node.position.data += self.speed * dt * direction
         
     def shoot(self, dt: float) -> None:
         """

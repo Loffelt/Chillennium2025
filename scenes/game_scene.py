@@ -7,6 +7,7 @@ class GameScene():
     def __init__(self) -> None:
         self.nodes: list[Node] = []
         self.enemies: list[Enemy] = []
+        self.guns: list[tuple] = []
         
 def get_plain_nodes(game_scene: GameScene) -> list[Node]:
     """

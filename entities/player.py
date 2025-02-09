@@ -51,6 +51,7 @@ class Player(Entity):
             
         self.move(dt)
         self.shoot(dt)
+        self.pick()
         
         # controls fov
         self.fov_time += dt
@@ -63,6 +64,23 @@ class Player(Entity):
             self.game.sight_scene.camera.offest = glm.vec3(0, 1, 0) + self.shake_intensity * glm.normalize([random.uniform(-1, 1) for _ in range(3)])
             self.shake_time -= dt
         else: self.game.sight_scene.camera.offest = glm.vec3(0, 1, 0)
+        
+    def pick(self) -> None:
+        if not self.engine.mouse.right_click: return
+        cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)
+        if not cast.node or not any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]): return
+        if glm.length(self.camera.position - cast.position) > 5: return
+        
+        match cast.node.tags[0]:
+            case 'pistol':
+                self.gun = self.game.pistol
+                self.game.player_gun.mesh = self.game.pistol_mesh
+            case 'shotgun':
+                self.gun = self.game.shotgun
+                self.game.player_gun.mesh = self.game.shotgun_mesh
+            case 'smg':
+                self.gun = self.game.smg
+                self.game.player_gun.mesh = self.game.smg_mesh
         
     def camera_shake(self, time: float, intensity: float) -> None:
         self.shake_time = time
@@ -100,7 +118,7 @@ class Player(Entity):
         Attemps to fire the player gun if the player is left clicking
         """
         self.gun.update(dt)
-        if not self.engine.mouse.left_click and not (self.gun == self.game.submachine and self.engine.mouse.left_down): return
+        if not self.engine.mouse.left_click and not (self.gun == self.game.smg and self.engine.mouse.left_down): return
         
         fire_position = self.game.player_gun.position.data + self.camera.forward * 1.25
         cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)
