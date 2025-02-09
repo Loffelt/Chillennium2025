@@ -13,6 +13,10 @@ class Player(Entity):
         self.game = game
         self.gun = gun
         self.jumping = False
+            
+        self.fov = 70
+        self.target_fov = 80
+        self.fov_time = 0
         
     def update(self, dt: float) -> None:
         """
@@ -24,9 +28,16 @@ class Player(Entity):
         if self.position.y < 1.1: 
             self.position.y = 1
             if not self.jumping: self.node.velocity.y = 0
+            elif self.node.velocity.y < 0: self.jumping = False
             
         self.move()
         self.shoot(dt)
+        
+        # controls fov
+        self.fov_time += dt
+        if self.fov_time > 0.02 and self.fov != self.target_fov:
+            self.fov_time = 0
+            self.fov += 1 if self.fov < self.target_fov else -1
         
     def move(self) -> None:
         """
@@ -37,9 +48,14 @@ class Player(Entity):
         # contraol the player's position by adding velocity to the node
         keys = self.engine.keys
         x, z = self.camera.forward.x, self.camera.forward.z
-        movement = self.camera.right * (keys[pg.K_d] * (1 + keys[pg.K_LSHIFT]) - keys[pg.K_a]) # should change fov when sprinting
+        movement = self.camera.right * (keys[pg.K_d] - keys[pg.K_a]) # should change fov when sprinting
         if x != 0 or z != 0: movement += glm.vec3(x, 0, z) * (keys[pg.K_w] - keys[pg.K_s])
         if glm.length2(movement) > 0: movement = self.speed * glm.normalize(movement)
+        if keys[pg.K_LSHIFT] and not keys[pg.K_s]: 
+            movement *= 1.5
+            self.target_fov = 80
+        else:
+            self.target_fov = 70
         
         self.node.velocity.x = movement.x
         self.node.velocity.z = movement.z
@@ -66,11 +82,17 @@ class Player(Entity):
     def camera(self) -> FollowCamera: return self.game.sight_scene.camera
     @property
     def engine(self) -> Engine: return self.game.engine
+    @property
+    def fov(self): return self.camera.fov
     
     @position.setter
     def position(self, value):
         self._position = value
         self.node.position.data = self._position + glm.vec3(0, 1, 0)
+        
+    @fov.setter
+    def fov(self, value):
+        self.camera.fov = value
         
         
 def get_player_node() -> Node:
