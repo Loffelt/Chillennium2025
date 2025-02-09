@@ -61,9 +61,9 @@ class BulletHandler():
                 # elif cast.node.physics:
                 #     cast.node.apply_offset_force(-cast.normal * 10, cast.position - cast.node.position.data, dt)
                     
-                if bullet.is_dead: # bullet on death sequence
-                    to_remove.append(bullet)
-                    self.particle_splatter(cast.position, cast.normal, bullet.color)
+            if bullet.is_dead: # bullet on death sequence
+                to_remove.append(bullet)
+                if d1: self.particle_splatter(cast.position, cast.normal, bullet.color)
             
             # always add the bullet particle so player can see where its going
             self.add_bullet_particles(bullet, bullet_origin)

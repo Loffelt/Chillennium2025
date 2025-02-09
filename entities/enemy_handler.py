@@ -18,8 +18,6 @@ class EnemyHandler():
         """
         to_remove = []
         
-        # print(len(self.enemies))
-        
         for enemy in self.enemies:
             
             # run code if enemy has been killed
