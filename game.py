@@ -233,6 +233,10 @@ class Game():
             for i in range(0, len(self.gun_nodes), 2):
                 self.gun_nodes[i].position.data = self.gun_nodes[i + 1].position.data + (0.2, 0, 0)
 
+            if self.engine.event_resize: self.render_handler.resize()
+
+            bsk.pg.display.flip()
+
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1] or len(self.enemy_handler.enemies) < 1 and not self.level_complete:
                 self.levels.pop(0)
                 self.ui.add_transition()
@@ -251,7 +255,6 @@ class Game():
             self.render_handler.render()
 
             self.engine.update(render=False)
-            bsk.pg.display.flip()
 
 game = Game()
 game.start()

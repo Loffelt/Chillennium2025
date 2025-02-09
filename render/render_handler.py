@@ -22,7 +22,7 @@ class RenderHandler:
         # First render pass
         self.sight_prepass = bsk.Framebuffer(self.engine)
         self.edge_sight    = bsk.Framebuffer(self.engine)
-        self.edge_normal    = bsk.Framebuffer(self.engine)
+        self.edge_normal   = bsk.Framebuffer(self.engine)
         self.geometry      = bsk.Framebuffer(self.engine)
         self.normals       = bsk.Framebuffer(self.engine)
         self.dimensions    = bsk.Framebuffer(self.engine)
@@ -152,3 +152,20 @@ class RenderHandler:
         self.engine.ctx.enable(mgl.DEPTH_TEST)
         # self.show.render()
         # pg.display.flip()
+
+
+    def resize(self):
+        # First render pass
+        self.sight_prepass.resize()
+        self.edge_sight.resize()
+        self.edge_normal.resize()
+        self.geometry.resize()
+        self.normals.resize()
+        self.dimensions.resize()
+
+        # Level destinations
+        self.plain.resize()
+        self.sight.resize()
+
+        # Post processes
+        self.edge_detect.resize()
