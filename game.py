@@ -33,6 +33,32 @@ class Game():
         self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
         self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
         self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
+        
+        self.pistol = Gun(
+            game = self,
+            count = 1,
+            capacity = 7,
+            cooldown = 0.2,
+            spread = 0.02,
+            ricochets = 2,
+            damage = 1,
+            radius = 0.2,
+            color  = 'black',
+            owner  = 'player'
+        )
+        
+        self.shotgun = Gun(
+            game = self,
+            count = 7,
+            capacity = 3,
+            cooldown = 0.6,
+            spread = 0.1,
+            ricochets = 1,
+            damage = 1,
+            radius = 0.125,
+            color = 'black',
+            owner = 'player'
+        )
 
         #UI
         self.ui = UI(self)
@@ -55,18 +81,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = Gun(
-                game = self,
-                count = 1,
-                capacity = 7,
-                cooldown = 0.2,
-                spread = 0.02,
-                ricochets = 10,
-                damage = 1,
-                radius = 0.5,
-                color  = 'black',
-                owner  = 'player'
-            ),
+            gun = self.shotgun,
             node = player_node,
             game = self
         )
@@ -79,6 +94,7 @@ class Game():
         self.sky = self.sight_scene.sky
         
         # add handlers
+        self.load_materials()
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler(self)
 
@@ -103,7 +119,7 @@ class Game():
 
     def load_materials(self):
         saturation = 80
-        self.red = bsk.Material(color=(255, saturation, saturation), roughness=.8, metallicness=0.0, specular=0.25)
+        self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
 
@@ -113,7 +129,6 @@ class Game():
         """
         
         self.render_handler = RenderHandler(self)
-        self.load_materials()
         self.load_meshes()
         
         self.load_level(test_scene(self))

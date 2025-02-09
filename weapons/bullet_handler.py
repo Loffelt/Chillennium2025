@@ -12,8 +12,9 @@ class BulletHandler():
         self.game = game
         
         self.materials = {
-            'red' : Material(color=(255, 0, 0)),
-            'black' : Material(color=(0, 0, 0))
+            'red' : self.game.red,
+            'black' : Material(color=(0, 0, 0)),
+            'white' : Material(color=(255, 255, 255))
         }
         
     def update(self, dt: float) -> None:
