@@ -113,7 +113,5 @@ class Game():
             self.engine.update(render=False)
             bsk.pg.display.flip()
 
-bsk.Scene
-
 game = Game()
 game.start()

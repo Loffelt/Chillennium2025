@@ -6,7 +6,7 @@ out vec4 fragColor;
 in vec2 uv;
 uniform sampler2D screenTexture;
 
-const float offset = 1.0 / 300.0;  
+const float offset = 1.0 / 800.0;  
 
 
 void main()
@@ -29,21 +29,26 @@ void main()
         1, 1, 1
     );
     
+
     vec3 sampleTex[9];
     for(int i = 0; i < 9; i++)
     {
-        sampleTex[i] = vec3(dot(vec3(texture(screenTexture, uv.xy + offsets[i])), vec3(1.0, 1.0, 1.0))/3.0);
+        sampleTex[i] = texture(screenTexture, uv.xy + offsets[i]).rgb;
     }
     vec3 col = vec3(0.0);
     for(int i = 0; i < 9; i++)
         col += sampleTex[i] * kernel[i];
 
-    
-    vec4 outline = vec4(col, 1.0);
+    // float line = dot(col, vec3(1.0, 1.0, 1.0));
 
-    if (outline.r < 0.05){
-        outline.rgb = vec3(0.0);
+    vec4 outline = vec4(0.0, 0.0, 0.0, 1.0);
+
+    float t = .05;
+    if (col.r > t || col.g > t || col.b > t){
+        outline.rgb = vec3(1.0);
     }
 
-    fragColor = outline;
+    fragColor = vec4(vec3(1.0) - outline.rgb, 1.0);
+
+    // fragColor = outline;
 }

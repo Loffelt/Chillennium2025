@@ -51,22 +51,9 @@ vec3 getNormal(Material mtl, mat3 TBN){
     return normal;
 }
 
-uniform sampler2D depthMap;
-uniform vec2 viewportDimensions;
-
 void main() {
-
-
-    vec2 uv = (gl_FragCoord.xy) / viewportDimensions;
     vec3 normal;
 
-    float mappedDepth = texture(depthMap, uv).r;
-
-    if (gl_FragCoord.z < mappedDepth){
-        discard;
-    }
-    else{
-        normal = getNormal(mtl, TBN);
-        fragColor = vec4(normal/2 + 0.5, 1.0);
-    }
+    normal = getNormal(mtl, TBN);
+    fragColor = vec4(abs(normal), 1.0);
 }
