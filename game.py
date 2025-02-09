@@ -73,6 +73,17 @@ class Game():
             owner = 'player'
         )
 
+        #UI
+        self.ui = UI(self)
+
+    def load_meshes(self):
+        self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
+
+    def load_level(self, game_scene: GameScene) -> None:
+        """
+        Add all nodes to the scene
+        """ 
+
         # add player to scene
         player_node = get_player_node()
         
