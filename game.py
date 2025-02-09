@@ -9,6 +9,7 @@ from scenes.game_scene import GameScene, get_plain_nodes
 from scenes.test_scene import test_scene
 from render.render_handler import RenderHandler
 from ui.ui import UI
+# import cudart
 
 
 class Game():
@@ -111,6 +112,10 @@ class Game():
         self.load_level(test_scene(self))
 
         while self.engine.running:
+
+            if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1]:
+                self.ui.add_transition()
+
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
             self.player.update(self.engine.delta_time)
