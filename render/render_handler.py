@@ -62,10 +62,13 @@ class RenderHandler:
         self.outline_combine_shader.program['otherOutline'] = 6
         self.edge_normal.texture.use(location=6)
 
-        self.output_shader.program['dimDepthTex'] = 7
-        self.dimensions.depth.use(location=7)
-        self.output_shader.program['plainDepthTex'] = 8
-        self.normals.depth.use(location=8)
+        self.dim_shader.program['plainDepthTex'] = 7
+        self.geometry.depth.use(location=7)
+
+        # self.output_shader.program['dimDepthTex'] = 7
+        # self.dimensions.depth.use(location=7)
+        # self.output_shader.program['plainDepthTex'] = 8
+        # self.normals.depth.use(location=8)
 
         self.show = self.geometry
 
@@ -89,11 +92,20 @@ class RenderHandler:
         
         self.update_scenes()
 
+        # Render Geom
+        self.engine.scene = self.game.plain_scene
+        self.engine.shader = self.geo_shader
+        self.game.plain_scene.sky = None
+        self.game.plain_scene.render(self.geometry)
+
         # Render the dimesions map and depth
         self.engine.scene = self.game.dimension_scene
         self.engine.shader = self.dim_shader
         self.game.dimension_scene.sky = None
         self.game.dimension_scene.render(self.dimensions)
+        
+        self.dim_shader.program['plainDepthTex'] = 7
+        self.geometry.depth.use(location=7)
 
         # Render the normals
         self.engine.scene = self.game.plain_scene
@@ -117,11 +129,6 @@ class RenderHandler:
         self.plain.clear()
         self.outline_combiner.render()
 
-        # # Render plain
-        # self.engine.scene = self.game.plain_scene
-        # self.engine.shader = self.geo_shader
-        # self.game.plain_scene.sky = None
-        # self.game.plain_scene.render(self.geometry)
 
 
         # Show to the screen
@@ -135,10 +142,10 @@ class RenderHandler:
         self.sight_prepass.texture.use(location=2)
 
         # TODO depth
-        self.output_shader.program['dimDepthTex'] = 7
-        self.dimensions.depth.use(location=7)
-        self.output_shader.program['plainDepthTex'] = 8
-        self.normals.depth.use(location=8)
+        # self.output_shader.program['dimDepthTex'] = 7
+        # self.dimensions.depth.use(location=7)
+        # self.output_shader.program['plainDepthTex'] = 8
+        # self.normals.depth.use(location=8)
 
         self.vao.render()
         
