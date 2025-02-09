@@ -107,6 +107,8 @@ class Game():
         self.ui = UI(self)
 
     def load_meshes(self):
+        self.pistol_mesh = bsk.Mesh('meshes/pistol.obj')
+        self.wedge_mesh = bsk.Mesh('meshes/wedge.obj')
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
 
     def load_level(self, game_scene: GameScene) -> None:
