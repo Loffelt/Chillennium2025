@@ -1,7 +1,7 @@
 import glm
 from entities.enemy import Enemy
 from weapons.bullet import Bullet
-from basilisk import Scene, Material, Node
+from basilisk import Scene, Node
 import random
 
 
@@ -13,8 +13,8 @@ class BulletHandler():
         
         self.materials = {
             'red' : self.game.red,
-            'black' : Material(color=(0, 0, 0)),
-            'white' : Material(color=(255, 255, 255))
+            'black' : self.game.black,
+            'white' : self.game.white
         }
         
     def update(self, dt: float) -> None:

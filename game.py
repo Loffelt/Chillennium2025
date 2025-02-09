@@ -153,8 +153,11 @@ class Game():
 
         saturation = 80
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
-        self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
+        
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
+        self.purple = bsk.Material(color=(255, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
+        self.cyan = bsk.Material(color=(saturation, 255, 255), roughness=.8, metallicness=0.0, specular=0.25)
+        self.yellow = bsk.Material(color=(255, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.white = bsk.Material(color=(255, 255, 255))
         self.black = bsk.Material(color=(30, 30, 30))
 
