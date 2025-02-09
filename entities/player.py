@@ -76,9 +76,11 @@ class Player(Entity):
             case self.game.pistol_mesh: tag = 'pistol'
             case self.game.shotgun_mesh: tag = 'shotgun'
             case self.game.smg_mesh: tag = 'smg'
-            
-        if len(cast.node.children): cast.node.children[0].mesh = self.game.player_gun.mesh
-        else: cast.node.mesh = self.game.player_gun.mesh
+        
+        for i in range(0, len(self.game.gun_nodes), 2):
+            if not (cast.node == self.game.gun_nodes[i] or cast.node == self.game.gun_nodes[i + 1]): continue
+            print(self.game.gun_nodes[i].mesh == self.game.engine.cube)
+            self.game.gun_nodes[i].mesh = self.game.player_gun.mesh
         
         match cast.node.tags[0]:
             case 'pistol':
@@ -164,7 +166,7 @@ def get_player_node() -> Node:
     player_node = Node(
         physics = True,
         collision = True,
-        scale = (1, 2, 1),
+        scale = (0.5, 2, 0.5),
         tags = ['player'],
         collision_group = 'entity'
     )

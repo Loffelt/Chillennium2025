@@ -73,7 +73,6 @@ class RenderHandler:
         """
         Updates the nessecary data in the scenes
         """
-        
         self.game.plain_scene.node_handler.update()
         self.game.plain_scene.particle.update()
         self.game.dimension_scene.node_handler.update()
