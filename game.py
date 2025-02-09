@@ -37,7 +37,7 @@ class Game():
         self.load_meshes()
         self.load_materials()
         
-        self.levels = [level1, level1, level2, level3, level4, level6]
+        self.levels = [level6, level1, level2, level3, level4, level5, level7]
 
         self.pistol = Gun(
             game = self,
@@ -83,7 +83,7 @@ class Game():
         
         self.player_gun = bsk.Node(
             scale = (0.1, 0.1, 0.1),
-            mesh = self.smg_mesh,
+            mesh = self.pistol_mesh,
             material = self.blue
         )
         self.default_scene.add(self.player_gun)
@@ -92,7 +92,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.smg,
+            gun = self.pistol,
             node = player_node,
             game = self
         )

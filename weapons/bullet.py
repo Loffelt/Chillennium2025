@@ -47,6 +47,9 @@ class Bullet():
         """
         Checks to see if the bullet is still alive after collision, updates moving vector if so
         """
+        # if glm.dot(self.path, normal) > 0: 
+        #     self.ricochet_remaining = -1
+        #     return
         self.path = glm.reflect(self.path, normal)
         self.ricochet_remaining -= 1
         

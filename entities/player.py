@@ -79,7 +79,6 @@ class Player(Entity):
         
         for i in range(0, len(self.game.gun_nodes), 2):
             if not (cast.node == self.game.gun_nodes[i] or cast.node == self.game.gun_nodes[i + 1]): continue
-            print(self.game.gun_nodes[i].mesh == self.game.engine.cube)
             self.game.gun_nodes[i].mesh = self.game.player_gun.mesh
         
         match cast.node.tags[0]:
