@@ -62,6 +62,11 @@ class RenderHandler:
         self.outline_combine_shader.program['otherOutline'] = 6
         self.edge_normal.texture.use(location=6)
 
+        self.output_shader.program['dimDepthTex'] = 7
+        self.dimensions.depth.use(location=7)
+        self.output_shader.program['plainDepthTex'] = 8
+        self.normals.depth.use(location=8)
+
         self.show = self.geometry
 
     def update_scenes(self):
@@ -129,6 +134,13 @@ class RenderHandler:
         self.plain.texture.use(location=1)
         self.output_shader.program['sightView'] = 2
         self.sight_prepass.texture.use(location=2)
+
+        # TODO depth
+        self.output_shader.program['dimDepthTex'] = 7
+        self.dimensions.depth.use(location=7)
+        self.output_shader.program['plainDepthTex'] = 8
+        self.normals.depth.use(location=8)
+
         self.vao.render()
         
         # Render ui

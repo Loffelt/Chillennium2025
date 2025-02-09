@@ -8,28 +8,24 @@ uniform sampler2D dimensionMap;
 uniform sampler2D plainView;
 uniform sampler2D sightView;
 
+uniform sampler2D dimDepthTex;
+uniform sampler2D plainDepthTex;
+
 void main()
 { 
-    float dim = texture(dimensionMap, uv).r;
-    float depth = texture(dimensionMap, uv).w;
 
+
+    float dim = texture(dimensionMap, uv).r;
     vec3 plain = texture(plainView, uv).rgb;
     vec3 sight = texture(sightView, uv).rgb;
 
-    fragColor = vec4(mix(plain, sight, dim), 1.0);
+    float dimDepth = texture(dimDepthTex, uv).r;
+    float plainDepth = texture(plainDepthTex, uv).r;
 
-    // if (depthDim > depthSight) {
-    //     fragColor = vec4(plain, 1.0);
-    // }
-    // else {
-    //     fragColor = vec4(mix(plain, sight, dim), 1.0);
-    // }
-
-    // fragColor.rgb /= 100000;
-
-    // if 
-
-    // fragColor.rgb += 20 - depthSight * 20;
-    // fragColor.r += 20 - depthDim * 20;
-
+    if (plainDepth < dimDepth) {
+        fragColor = vec4(plain, 1.0);
+    }
+    else {
+        fragColor = vec4(mix(plain, sight, dim), 1.0);
+    }
 }
