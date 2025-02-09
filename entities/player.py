@@ -34,7 +34,7 @@ class Player(Entity):
         """
         self.node.rotation = glm.conjugate(glm.quatLookAt(glm.vec3(self.camera.forward.x, 0, self.camera.forward.z), self.camera.UP))
         self.game.player_gun.rotation = glm.normalize(glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * self.game.sight_scene.camera.rotation)
-        self.game.player_gun.position = self.node.position.data + glm.vec3(0, 0.35, 0) + self.camera.right * 0.75 + self.camera.forward * 0.75
+        self.game.player_gun.position = self.node.position.data + glm.vec3(0, 0.35, 0) + self.camera.right * 0.75 + self.camera.forward * 1.5
 
         self.health_cube.rotation = glm.normalize(glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * self.game.sight_scene.camera.rotation)
         self.health_cube.position = self.node.position.data + glm.vec3(0, 0.5, 0) - self.camera.right * 0.4 + self.camera.forward * 0.75
