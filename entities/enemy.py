@@ -9,15 +9,27 @@ from basilisk import Node
 
 class Enemy(Entity):
     
-    def __init__(self, game, position: glm.vec3, health: int, speed: float, spread: float, gun: Gun) -> None:
+    def __init__(self, game, position: glm.vec3, health: int=1, speed: float=3, spread: float=0.05, gun: Gun=None, ai: str='direct') -> None:
         self.health = health
         self.speed = speed
         self.spread = spread
         
-        self.gun = gun
+        self.gun = gun if gun else Gun(
+            game = game,
+            count = 1,
+            capacity = 3,
+            spread = 0.05,
+            cooldown = 1,
+            ricochets = 1,
+            damage = 1,
+            radius = 0,
+            color  = 'red',
+        )
+        
         self.game = game
         self.player: Player = game.player
         self.mist = MistMan(position)
+        self.ai = ai
         
         self.node = Node(
             position + (0, 1, 0),
@@ -30,7 +42,7 @@ class Enemy(Entity):
         )
         
         self.gun_node = Node(
-            scale = (0.1, 0.1, 0.7)
+            scale = (0.1, 0.1, 7)
         )
         
         self.game.sight_scene.add(self.gun_node)
@@ -51,6 +63,7 @@ class Enemy(Entity):
         direction = self.game.player.position - self.position
         if glm.length2(direction) < 1e-7: return
         direction = glm.normalize(direction)
+        
         self.gun_node.position = self.mist.chest + direction * 2
         self.gun_node.rotation = glm.conjugate(glm.quatLookAt(direction, (0, 1, 0)))
         
@@ -58,12 +71,16 @@ class Enemy(Entity):
         """
         Main movement AI for enemies
         """
-        direction = self.player.position - self.position
-        if glm.length2(direction) < 1e-7: return
-        direction = glm.normalize(direction)
-        self.mist.forward = direction
-        
-        self.position += self.speed * dt * direction
+        if self.ai == 'direct':
+            direction = self.player.position - self.position
+            if glm.length2(direction) < 1e-7: return
+            direction = glm.normalize(direction)
+            self.mist.forward = direction
+            
+            self.position += self.speed * dt * direction
+            
+        elif self.ai == 'smart':
+            ...
         
     def shoot(self, dt: float) -> None:
         """
