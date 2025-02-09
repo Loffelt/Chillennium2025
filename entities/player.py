@@ -2,6 +2,7 @@ import glm
 from basilisk import Node, Engine, pg, FollowCamera
 from entities.entity import Entity
 from weapons.gun import Gun
+import random
 
 
 class Player(Entity):
@@ -81,7 +82,6 @@ class Player(Entity):
         if not bullets: return
         
         self.game.bullet_handler.bullets += bullets
-        
         
     @property
     def position(self): return self._position

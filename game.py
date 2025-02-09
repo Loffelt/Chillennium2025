@@ -6,8 +6,7 @@ from weapons.bullet_handler import BulletHandler
 from weapons.gun import Gun
 from weapons.bullet import Bullet
 from scenes.game_scene import GameScene, get_plain_nodes
-from scenes.test_scene import test_scene
-from scenes.levels import level1
+from scenes.levels import level1, level2
 from render.render_handler import RenderHandler
 from ui.ui import UI
 # import cudart
@@ -37,7 +36,7 @@ class Game():
         
         self.load_meshes()
         
-        self.levels = [level1]
+        self.levels = [level1, level2]
 
         self.pistol = Gun(
             game = self,
@@ -131,6 +130,8 @@ class Game():
         """
         Add all nodes to the scene
         """ 
+        self.level_complete = False
+        
         # plain scene
         self.plain_scene.remove(*self.plain_scene.nodes)
         self.plain_scene.add(*get_plain_nodes(game_scene))
@@ -143,10 +144,16 @@ class Game():
         for enemy in game_scene.enemies: self.sight_scene.add(enemy.node)
         
         self.bullet_handler.bullets = []
-        self.enemy_handler.enemies = game_scene.enemies
+        self.enemy_handler.enemies = []
+        print(game_scene.enemies)
+        self.enemy_handler.enemies = game_scene.enemies[:]
         
         # dimensions scene
         self.dimension_scene.remove(*self.dimension_scene.nodes)
+        
+        self.player.position = glm.vec3(0, 1, 0)
+        # self.sight_scene.camera.yaw = 0.1
+        self.sight_scene.camera.pitch = 0
 
     def load_materials(self):
         saturation = 80
@@ -183,14 +190,15 @@ class Game():
         """
         
         self.render_handler = RenderHandler(self)
-        
+        self.level_complete = False
         self.load_level(self.next_level()(self))
 
         while self.engine.running:
 
-            if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1]:
+            if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1] or len(self.enemy_handler.enemies) < 1 and not self.level_complete:
                 self.ui.add_transition()
                 self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(self.next_level()(self)))
+                self.level_complete = True
 
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)

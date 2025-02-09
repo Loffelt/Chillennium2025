@@ -17,15 +17,28 @@ def level1(game) -> GameScene:
         ai=None
     ) for vec in ((10, 0, -15), (-10, 0, -20))]
     
-    # for enemy in gs.enemies: enemy.gun.cooldown = 1e8
+    for enemy in gs.enemies: enemy.gun.cooldown = 1e8
     
     box = Node(
-        position=(1, 5, -3),
+        position=(1, 5, -25),
         physics=True,
         collision=True,
         material=game.blue
     )
     
     gs.nodes.append(box)
+    
+    return gs
+
+
+def level2(game) -> GameScene:
+    gs = GameScene()
+    
+    gs.nodes += rect_room(0, -15, 10, 20, 10)
+    
+    gs.enemies.append(Enemy(
+        game, 
+        glm.vec3(5, 0, -25)
+    ))
     
     return gs
