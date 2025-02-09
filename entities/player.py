@@ -23,14 +23,15 @@ class Player(Entity):
         
         """
         self.node.rotation = glm.conjugate(glm.quatLookAt(glm.vec3(self.camera.forward.x, 0, self.camera.forward.z), self.camera.UP))
-        # self.game.player_gun.rotation = self.game.sight_scene.camera.rotation
-        # self.game.player_gun.position = self.node.position.data + glm.vec3(0, 1.5, 0)
+        self.game.player_gun.rotation = self.game.sight_scene.camera.rotation
+        self.game.player_gun.position = self.node.position.data + glm.vec3(0, 0.35, 0) + self.camera.right * 0.4 + self.camera.forward * 0.75
+        
         if self.position.y < 1.1: 
-            self.position.y = 1
+            self.position.y = 1.1
             if not self.jumping: self.node.velocity.y = 0
             elif self.node.velocity.y < 0: self.jumping = False
             
-        self.move()
+        self.move(dt)
         self.shoot(dt)
         
         # controls fov
@@ -39,7 +40,7 @@ class Player(Entity):
             self.fov_time = 0
             self.fov += 1 if self.fov < self.target_fov else -1
         
-    def move(self) -> None:
+    def move(self, dt) -> None:
         """
         Sets the player's node's velocity to the input keys (wasd)
         """
@@ -56,9 +57,11 @@ class Player(Entity):
             self.target_fov = 80
         else:
             self.target_fov = 70
-        if keys[pg.K_SPACE] and not self.jumping:
-            self.node.velocity.y = 10
+        if keys[pg.K_SPACE] and (not self.jumping or any(glm.dot(collision.normal, (0, 1, 0)) > 0.2 for collision in self.node.collisions)):
+            self.node.velocity.y = 15
             self.jumping = True
+            
+        if glm.length2(movement) == 0 and glm.length2((self.node.velocity.x, 0, self.node.velocity.z)) > 1: movement = glm.vec3(self.node.velocity.x, 0, self.node.velocity.z) * (1 - dt * 10)
         
         self.node.velocity.x = movement.x
         self.node.velocity.z = movement.z
@@ -70,7 +73,7 @@ class Player(Entity):
         self.gun.update(dt)
         if not self.engine.mouse.left_click: return
         
-        fire_position = self.camera.position + self.camera.right * 0.5
+        fire_position = self.game.player_gun.position.data + self.camera.forward * 1.25
         cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)
         target = cast.position if cast.node else self.camera.forward * 1e3
         
@@ -111,20 +114,7 @@ def get_player_node() -> Node:
 
 def get_player_gun() -> Node:
     gun = Node(
-        scale = (0.1, 0.1, 0.1)
+        scale = (0.1, 0.1, 1)
     )
-    
-    barrel = Node(
-        position = (0.6, 0.25, -1),
-        scale = (0.1, 0.1, 1),
-    )
-    
-    muzzle = Node(
-        position = (0.6, 0.25, -1.5),
-        scale = (0.07, 0.07, 0.07)
-    )
-    
-    gun.add(barrel)
-    gun.add(muzzle)
     
     return gun

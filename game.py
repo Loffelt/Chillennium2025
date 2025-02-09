@@ -26,6 +26,8 @@ class Game():
         self.engine.scene = self.sight_scene
         self.engine.scene = self.dimension_scene 
         
+        self.sight_scene.physics_engine.accelerations = [glm.vec3(0, -25, 0)]
+        
         self.default_shader = self.engine.shader
         self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
         self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
@@ -34,8 +36,8 @@ class Game():
         # add player to scene
         player_node = get_player_node()
         
-        # self.player_gun = get_player_gun()
-        # self.sight_scene.add(self.player_gun)
+        self.player_gun = get_player_gun()
+        self.default_scene.add(self.player_gun)
         
         self.player = Player(
             position = glm.vec3(0, 0, 0), 

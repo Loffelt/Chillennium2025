@@ -3,34 +3,20 @@ from basilisk import Node
 from scenes.game_scene import GameScene
 from entities.enemy import Enemy
 from weapons.gun import Gun
-from scenes.helper import rect_wall_nodes
+from scenes.helper import rect_room
 
 
 def test_scene(game) -> GameScene:
     gs = GameScene()
     
-    platform = Node(
-        position = (0, -1, 0),
-        scale = (20, 1, 20),
-        collision = True,
-        material=game.red
-    )
-    
-    ceiling = Node(
-        position = (0, 20, 0),
-        scale = (20, 1, 20),
-        collision = True,
-        material=game.blue
-    )
-    
     box = Node(
-        position=(1, 2, 3),
+        position=(1, 5, 3),
         physics=True,
         collision=True,
         material=game.green
     )
     
-    walls = rect_wall_nodes(0, 0, 20, 20, 10)
+    walls = rect_room(0, 0, 20, 20, 10)
     
     # enemy = Enemy(
     #     game = game,
@@ -52,8 +38,6 @@ def test_scene(game) -> GameScene:
     # )
     
     # gs.enemies.append(enemy)
-    gs.nodes.append(platform)
-    gs.nodes.append(ceiling)
     gs.nodes.append(box)
     gs.nodes += walls
     
