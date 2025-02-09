@@ -139,15 +139,12 @@ def level6(game) -> GameScene:
     
     gs.guns.append(('shotgun', glm.vec3(1, 7, -15)))
     
-    dummy = Enemy(
-        game, 
-        glm.vec3(-5, 0, -10),
-        ai=None
-    )
-    
-    dummy.gun.cooldown = 1e8
-    
-    gs.enemies.append(dummy)
+    for x in range(-5, 5, 3):
+        gs.enemies.append(Enemy(
+            game,
+            glm.vec3(x, 0, -25),
+            ai='smart'
+        ))
             
     return gs
 
