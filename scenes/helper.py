@@ -9,15 +9,15 @@ def rect_room(centerx, centerz, width, depth, height) -> list[Node]:
         scale = (data[2], height, data[3]),
         collision = True 
     ) for data in (
-        (centerx + width - 1, 0, 1, depth), 
-        (centerx - width + 1, 0, 1, depth), 
-        (0, centerz + depth - 1, width, 1), 
-        (0, centerz - depth + 1, width, 1)
+        (centerx + width, centerz, 1, depth), 
+        (centerx - width, centerz, 1, depth), 
+        (centerx, centerz + depth, width, 1), 
+        (centerx, centerz - depth, width, 1)
     )]
     
     nodes += [Node(
         scale = (width, 1, depth),
         collision = True,
-        position=(0, y, 0)
-    ) for y in (-1, height)]
+        position=(centerx, y, centerz)
+    ) for y in (-1, height * 2)]
     return nodes

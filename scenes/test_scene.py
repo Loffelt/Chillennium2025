@@ -24,17 +24,6 @@ def test_scene(game) -> GameScene:
         health = 1, 
         speed = 3, 
         spread = 0.1,
-        gun = Gun(
-            game = game,
-            count = 1,
-            capacity = 3,
-            spread = 0.05,
-            cooldown = 1,
-            ricochets = 1,
-            damage = 1,
-            radius = 0,
-            color  = 'red',
-        )
     )
     
     gs.enemies.append(enemy)

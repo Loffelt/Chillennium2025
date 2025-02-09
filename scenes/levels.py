@@ -9,6 +9,12 @@ from weapons.gun import Gun
 def level1(game) -> GameScene:
     gs = GameScene()
     
-    gs.nodes += rect_room(0, 0, 15, 20, 10)
+    gs.nodes += rect_room(0, -15, 15, 20, 10)
+    
+    gs.enemies += [Enemy(
+        game, 
+        glm.vec3(vec),
+        ai=None
+    ) for vec in ((10, 0, -15), (-10, 0, -20))]
     
     return gs

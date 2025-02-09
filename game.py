@@ -86,7 +86,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.submachine,
+            gun = self.pistol,
             node = player_node,
             game = self
         )
