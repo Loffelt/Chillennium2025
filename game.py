@@ -37,7 +37,7 @@ class Game():
         self.load_meshes()
         self.load_materials()
         
-        self.levels = [level5, level2, level3, level4]
+        self.levels = [level3, level2, level3, level4]
 
         self.pistol = Gun(
             game = self,
