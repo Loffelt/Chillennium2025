@@ -234,8 +234,9 @@ class Game():
                 self.gun_nodes[i].position.data = self.gun_nodes[i + 1].position.data + (0.2, 0, 0)
                 
             is_looking_at_gun = False
-            cast = self.sight_scene.raycast(self.sight_scene.camera.position + self.sight_scene.camera.forward * 2, self.sight_scene.camera.forward)
-            if cast.node and any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]): is_looking_at_gun = True
+            if len(self.gun_nodes) > 0:
+                cast = self.sight_scene.raycast(self.sight_scene.camera.position + self.sight_scene.camera.forward * 2, self.sight_scene.camera.forward)
+                if cast.node and any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]): is_looking_at_gun = True
             
             print('looking at gun:', is_looking_at_gun)
 

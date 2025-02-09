@@ -154,21 +154,19 @@ def level7(game) -> GameScene:
     
     gs.nodes += rect_room(0, -15, 20, 20, 10, game)
     
-    for x in range(-15, 20, 5):
-        for z in range(-15, 20, 5):
+    for x in range(-18, 20, 6):
+        for z in range(-18, 20, 6):
             gs.nodes.append(Node(
                 position = (x, 10, z - 15),
                 scale = (1, 20, 1),
                 collision = True
             ))
             
-            if not x % 2 or z % 2 or z > -5: continue
-            dummy = Enemy(
-                game, 
-                glm.vec3(x, 0, z - 15 + 2),
-                ai='direct'
-            )
-            
-            gs.enemies.append(dummy)
+            if not (abs(x) % 9 and z == -18): continue
+            gs.enemies.append(Enemy(
+                game,
+                glm.vec3(x + 4, 0, z + 4),
+                ai='smart'
+            ))
             
     return gs
