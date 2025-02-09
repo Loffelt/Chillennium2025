@@ -25,6 +25,9 @@ class Player(Entity):
         self.health_level = bsk.Node(scale=.1, material=game.red)
         self.game.default_scene.add(self.health_level, self.health_cube)
         
+        self.shake_time = 0
+        self.shake_intensity = 0
+        
     def update(self, dt: float) -> None:
         """
         
@@ -54,6 +57,16 @@ class Player(Entity):
         if self.fov_time > 0.01 and self.fov != self.target_fov:
             self.fov_time = 0
             self.fov += 1 if self.fov < self.target_fov else -1
+            
+        # controls camera shake
+        if self.shake_time > 0: 
+            self.game.sight_scene.camera.offest = glm.vec3(0, 1, 0) + self.shake_intensity * glm.normalize([random.uniform(-1, 1) for _ in range(3)])
+            self.shake_time -= dt
+        else: self.game.sight_scene.camera.offest = glm.vec3(0, 1, 0)
+        
+    def camera_shake(self, time: float, intensity: float) -> None:
+        self.shake_time = time
+        self.shake_intensity = intensity
         
     def move(self, dt) -> None:
         """
@@ -76,7 +89,8 @@ class Player(Entity):
             self.node.velocity.y = 15
             self.jumping = True
             
-        if glm.length2(movement) == 0 and glm.length2((self.node.velocity.x, 0, self.node.velocity.z)) > 1: movement = glm.vec3(self.node.velocity.x, 0, self.node.velocity.z) * (1 - dt * 10)
+        if glm.length2(movement) == 0 and glm.length2((self.node.velocity.x, 0, self.node.velocity.z)) > 1: 
+            movement = glm.vec3(self.node.velocity.x, 0, self.node.velocity.z) * (1 - dt * 10)
         
         self.node.velocity.x = movement.x
         self.node.velocity.z = movement.z
@@ -96,6 +110,7 @@ class Player(Entity):
         if not bullets: return
         
         self.game.bullet_handler.bullets += bullets
+        self.camera_shake(self.gun.cooldown / 10, self.gun.cooldown / 10)
         
     @property
     def position(self): return self._position
