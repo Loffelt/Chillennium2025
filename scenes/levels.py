@@ -17,7 +17,7 @@ def level1(game) -> GameScene:
         ai=None
     ) for vec in ((10, 0, -15), (-10, 0, -20))]
     
-    for enemy in gs.enemies: enemy.gun.cooldown = 1e8
+    # for enemy in gs.enemies: enemy.gun.cooldown = 1e8
     
     box = Node(
         position=(1, 5, -3),
