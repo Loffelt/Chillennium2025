@@ -96,6 +96,7 @@ class Player(Entity):
         
         self.game.bullet_handler.bullets += bullets
         
+        
     @property
     def position(self): return self._position
     @property
