@@ -59,17 +59,19 @@ class Game():
             color = 'black',
             owner = 'player'
         )
-
-        #UI
-        self.ui = UI(self)
-
-    def load_meshes(self):
-        self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
-
-    def load_level(self, game_scene: GameScene) -> None:
-        """
-        Add all nodes to the scene
-        """ 
+        
+        self.submachine = Gun(
+            game = self,
+            count = 1,
+            capacity = 3,
+            cooldown = 0.075,
+            spread = 0.05,
+            ricochets = 1,
+            damage = 1,
+            radius = 0.05,
+            color = 'black',
+            owner = 'player'
+        )
 
         # add player to scene
         player_node = get_player_node()
@@ -81,7 +83,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.shotgun,
+            gun = self.pistol,
             node = player_node,
             game = self
         )
@@ -98,17 +100,23 @@ class Game():
         self.enemy_handler = EnemyHandler(self)
         self.bullet_handler = BulletHandler(self)
 
-        # default scene
-        self.default_scene.remove(*self.default_scene.nodes)
+        #UI
+        self.ui = UI(self)
+
+    def load_meshes(self):
+        self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
+
+    def load_level(self, game_scene: GameScene) -> None:
+        """
+        Add all nodes to the scene
+        """ 
+        # plain scene
+        self.plain_scene.remove(*self.plain_scene.nodes)
+        self.plain_scene.add(*get_plain_nodes(game_scene))
         
         # sight scene
         self.sight_scene.remove(*self.sight_scene.nodes)
         self.sight_scene.add(*game_scene.nodes, self.player.node)
-
-        # plain scene
-        self.plain_scene.remove(*self.plain_scene.nodes)
-        self.plain_scene.add(*get_plain_nodes(game_scene))
-
         for enemy in game_scene.enemies: self.sight_scene.add(enemy.node)
         
         self.bullet_handler.bullets = []
@@ -136,7 +144,7 @@ class Game():
         while self.engine.running:
 
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1]:
-                self.ui.add_transition(duration=1.5, callback=lambda: self.load_level(test_scene(self)))
+                self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(test_scene(self)))
 
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
