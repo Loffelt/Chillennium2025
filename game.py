@@ -9,13 +9,13 @@ from scenes.game_scene import GameScene, get_plain_nodes
 from scenes.levels import *
 from render.render_handler import RenderHandler
 from ui.ui import UI
-# import cudart
+import cudart
 
 
 class Game():  
     
     def __init__(self) -> None:
-        self.engine = bsk.Engine()
+        self.engine = bsk.Engine(win_size=(1000, 700),  max_fps=60, title="Emulsion")
 
         self.default_scene = bsk.Scene()
         self.plain_scene = bsk.Scene()
@@ -93,7 +93,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.pistol,
+            gun = self.shotgun,
             node = player_node,
             game = self
         )
