@@ -6,7 +6,7 @@ from weapons.bullet_handler import BulletHandler
 from weapons.gun import Gun
 from weapons.bullet import Bullet
 from scenes.game_scene import GameScene, get_plain_nodes
-from scenes.levels import level1, level2
+from scenes.levels import level1, level2, level3
 from render.render_handler import RenderHandler
 from ui.ui import UI
 # import cudart
@@ -37,7 +37,7 @@ class Game():
         self.load_meshes()
         self.load_materials()
         
-        self.levels = [level1, level2]
+        self.levels = [level3, level1, level2]
 
         self.pistol = Gun(
             game = self,

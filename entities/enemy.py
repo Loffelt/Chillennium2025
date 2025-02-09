@@ -9,7 +9,7 @@ from basilisk import Node
 
 class Enemy(Entity):
     
-    def __init__(self, game, position: glm.vec3, health: int=1, speed: float=3, spread: float=0.05, gun: Gun=None, ai: str='direct') -> None:
+    def __init__(self, game, position: glm.vec3, health: int=1, speed: float=3, spread: float=0.05, gun: Gun=None, ai: str='smart') -> None:
         self.health = health
         self.speed = speed
         self.spread = spread
@@ -19,7 +19,7 @@ class Enemy(Entity):
             count = 1,
             capacity = 3,
             spread = 0.05,
-            cooldown = 1,
+            cooldown = 3,
             ricochets = 1,
             damage = 1,
             radius = 0,
@@ -82,7 +82,13 @@ class Enemy(Entity):
             self.position += self.speed * dt * direction
             
         elif self.ai == 'smart':
-            ...
+            direction = self.player.position - self.position
+            distance = glm.length(direction)
+            if distance < 1e-7: return
+            direction = glm.normalize(direction)
+            self.mist.forward = direction
+            if distance < 15: direction *= -1
+            self.position += self.speed * dt * direction
         
     def shoot(self, dt: float) -> None:
         """

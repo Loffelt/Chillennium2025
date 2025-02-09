@@ -42,3 +42,25 @@ def level2(game) -> GameScene:
     ))
     
     return gs
+
+def level3(game) -> GameScene:
+    gs = GameScene()
+    
+    gs.nodes += rect_room(0, -15, 20, 20, 10)
+    gs.nodes.append(Node(
+        position = (0, 10, -15),
+        scale = (5, 20, 5),
+        collision = True
+    ))
+    
+    gs.enemies.append(Enemy(
+        game, 
+        glm.vec3(10, 0, -25)
+    ))
+    
+    gs.enemies.append(Enemy(
+        game, 
+        glm.vec3(-10, 0, -25)
+    ))
+    
+    return gs
