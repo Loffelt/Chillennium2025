@@ -149,12 +149,21 @@ class Game():
         self.dimension_scene.remove(*self.dimension_scene.nodes)
 
     def load_materials(self):
+        self.engine.scene = self.sight_scene
+
         saturation = 80
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
         self.white = bsk.Material(color=(255, 255, 255))
         self.black = bsk.Material(color=(30, 30, 30))
+
+        self.sight_scene.material_handler.add(self.red)
+        self.sight_scene.material_handler.add(self.green)
+        self.sight_scene.material_handler.add(self.blue)
+        self.sight_scene.material_handler.add(self.white)
+        self.sight_scene.material_handler.add(self.black)
+
         
     def next_level(self):
         level = self.levels.pop(0)
