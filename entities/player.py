@@ -71,7 +71,7 @@ class Player(Entity):
         Attemps to fire the player gun if the player is left clicking
         """
         self.gun.update(dt)
-        if not self.engine.mouse.left_click: return
+        if not self.engine.mouse.left_click and not (self.gun == self.game.submachine and self.engine.mouse.left_down): return
         
         fire_position = self.game.player_gun.position.data + self.camera.forward * 1.25
         cast = self.game.sight_scene.raycast(self.camera.position + self.camera.forward * 2, self.camera.forward)

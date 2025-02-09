@@ -59,6 +59,19 @@ class Game():
             color = 'black',
             owner = 'player'
         )
+        
+        self.submachine = Gun(
+            game = self,
+            count = 1,
+            capacity = 3,
+            cooldown = 0.075,
+            spread = 0.05,
+            ricochets = 1,
+            damage = 1,
+            radius = 0.05,
+            color = 'black',
+            owner = 'player'
+        )
 
         # add player to scene
         player_node = get_player_node()
@@ -70,7 +83,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.shotgun,
+            gun = self.pistol,
             node = player_node,
             game = self
         )
