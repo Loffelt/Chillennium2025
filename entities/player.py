@@ -35,7 +35,7 @@ class Player(Entity):
         
         # controls fov
         self.fov_time += dt
-        if self.fov_time > 0.02 and self.fov != self.target_fov:
+        if self.fov_time > 0.01 and self.fov != self.target_fov:
             self.fov_time = 0
             self.fov += 1 if self.fov < self.target_fov else -1
         
@@ -51,11 +51,14 @@ class Player(Entity):
         movement = self.camera.right * (keys[pg.K_d] - keys[pg.K_a]) # should change fov when sprinting
         if x != 0 or z != 0: movement += glm.vec3(x, 0, z) * (keys[pg.K_w] - keys[pg.K_s])
         if glm.length2(movement) > 0: movement = self.speed * glm.normalize(movement)
-        if keys[pg.K_LSHIFT] and not keys[pg.K_s]: 
+        if keys[pg.K_LSHIFT] and not keys[pg.K_s] and (keys[pg.K_w] or keys[pg.K_a] or keys[pg.K_d]): 
             movement *= 1.5
             self.target_fov = 80
         else:
             self.target_fov = 70
+        if keys[pg.K_SPACE] and not self.jumping:
+            self.node.velocity.y = 10
+            self.jumping = True
         
         self.node.velocity.x = movement.x
         self.node.velocity.z = movement.z
