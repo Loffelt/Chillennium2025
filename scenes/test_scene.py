@@ -12,19 +12,22 @@ def test_scene(game) -> GameScene:
     platform = Node(
         position = (0, -1, 0),
         scale = (20, 1, 20),
-        collision = True
+        collision = True,
+        material=game.red
     )
     
     ceiling = Node(
         position = (0, 20, 0),
         scale = (20, 1, 20),
-        collision = True
+        collision = True,
+        material=game.blue
     )
     
     box = Node(
         position=(1, 2, 3),
         physics=True,
-        collision=True
+        collision=True,
+        material=game.green
     )
     
     walls = rect_wall_nodes(0, 0, 20, 20, 10)

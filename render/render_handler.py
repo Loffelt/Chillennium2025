@@ -17,10 +17,12 @@ class RenderHandler:
         self.geo_shader    = bsk.Shader(self.engine, vert='shaders/geometry.vert',      frag='shaders/geometry.frag')
         self.norm_shader   = bsk.Shader(self.engine, vert='shaders/normal.vert',        frag='shaders/normal.frag')
         self.output_shader = bsk.Shader(self.engine, vert='shaders/output.vert',        frag='shaders/output.frag')
+        self.outline_combine_shader = bsk.Shader(self.engine, vert='shaders/combine_outlines.vert', frag='shaders/combine_outlines.frag')
 
         # First render pass
         self.sight_prepass = bsk.Framebuffer(self.engine)
         self.edge_sight    = bsk.Framebuffer(self.engine)
+        self.edge_normal    = bsk.Framebuffer(self.engine)
         self.geometry      = bsk.Framebuffer(self.engine)
         self.normals       = bsk.Framebuffer(self.engine)
         self.dimensions    = bsk.Framebuffer(self.engine)
@@ -39,6 +41,9 @@ class RenderHandler:
         self.vbo = self.engine.ctx.buffer(np.array([[-1, -1, 0, 0, 0], [1, -1, 0, 1, 0], [1, 1, 0, 1, 1], [-1, 1, 0, 0, 1], [-1, -1, 0, 0, 0], [1, 1, 0, 1, 1]], dtype='f4'))
         self.vao = self.engine.ctx.vertex_array(self.output_shader.program, [(self.vbo, '3f 2f', 'in_position', 'in_uv')], skip_errors=True)
         
+        # Edge detect combinations
+        self.outline_combiner = self.engine.ctx.vertex_array(self.outline_combine_shader.program, [(self.vbo, '3f 2f', 'in_position', 'in_uv')], skip_errors=True)
+
         self.output_shader.program['dimensionMap'] = 0
         self.dimensions.texture.use(location=0)
         self.output_shader.program['plainView'] = 1
@@ -50,6 +55,12 @@ class RenderHandler:
         self.dimensions.depth.use(location=3)
         self.game.particle_shader.program['depthMap'] = 4
         self.dimensions.depth.use(location=4)
+
+        #Edge detect
+        self.outline_combine_shader.program['baseOutline'] = 5
+        self.edge_sight.texture.use(location=5)
+        self.outline_combine_shader.program['otherOutline'] = 6
+        self.edge_normal.texture.use(location=6)
 
         self.show = self.geometry
 
@@ -84,7 +95,6 @@ class RenderHandler:
         self.engine.scene = self.game.plain_scene
         self.engine.shader = self.norm_shader
         self.game.plain_scene.render(self.normals)
-        self.edge_detect.apply(self.normals, self.plain)
 
         # Render the sight scene with the dimensions depth
         self.engine.scene = self.game.sight_scene
@@ -92,8 +102,16 @@ class RenderHandler:
         self.game.plain_scene.sky = self.white_sky
         self.game.sight_scene.render(self.sight_prepass)
 
-        # Edge detect on plain/sight barrier
-        # self.edge_detect.apply(self.dimensions, self.plain)
+        # Edge detect
+        self.edge_detect.apply(self.normals, self.edge_normal)
+        self.edge_detect.apply(self.dimensions, self.edge_sight)
+        self.outline_combine_shader.program['baseOutline'] = 5
+        self.edge_sight.texture.use(location=5)
+        self.outline_combine_shader.program['otherOutline'] = 6
+        self.edge_normal.texture.use(location=6)
+        self.plain.use()
+        self.plain.clear()
+        self.outline_combiner.render()
 
         # # Render plain
         # self.engine.scene = self.game.plain_scene

@@ -93,12 +93,19 @@ class Game():
         # dimensions scene
         self.dimension_scene.remove(*self.dimension_scene.nodes)
 
+    def load_materials(self):
+        saturation = 80
+        self.red = bsk.Material(color=(255, saturation, saturation), roughness=.8, metallicness=0.0, specular=0.25)
+        self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
+        self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
+
     def start(self) -> None:
         """
         Starts the engine and the game
         """
         
         self.render_handler = RenderHandler(self)
+        self.load_materials()
         self.load_meshes()
         
         self.load_level(test_scene(self))
