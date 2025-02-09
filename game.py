@@ -64,11 +64,11 @@ class Game():
             game = self,
             count = 1,
             capacity = 3,
-            cooldown = 0.075,
-            spread = 0.05,
-            ricochets = 1,
+            cooldown = 0.1,
+            spread = 0.1,
+            ricochets = 0,
             damage = 1,
-            radius = 0.05,
+            radius = 0.03,
             color = 'black',
             owner = 'player'
         )
@@ -83,7 +83,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.shotgun,
+            gun = self.submachine,
             node = player_node,
             game = self
         )
@@ -128,8 +128,10 @@ class Game():
         self.plain_scene.add(*get_plain_nodes(game_scene))
         
         # sight scene
-        self.sight_scene.remove(*self.sight_scene.nodes)
-        self.sight_scene.add(*game_scene.nodes, self.player.node)
+        nodes = self.sight_scene.nodes[:]
+        nodes.remove(self.player.node)
+        self.sight_scene.remove(*nodes)
+        self.sight_scene.add(*game_scene.nodes)
         for enemy in game_scene.enemies: self.sight_scene.add(enemy.node)
         
         self.bullet_handler.bullets = []
@@ -143,6 +145,7 @@ class Game():
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
+        self.white = bsk.Material(color=(255, 255, 255))
 
     def start(self) -> None:
         """
