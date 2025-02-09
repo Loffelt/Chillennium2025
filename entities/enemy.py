@@ -39,7 +39,7 @@ class Enemy(Entity):
             physics = True,
             tags = ['enemy'],
             collision_group = 'entity',
-            # shader=game.invisible_shader
+            shader=game.invisible_shader
         )
         
         self.gun_node = Node(

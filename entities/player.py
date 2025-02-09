@@ -71,6 +71,15 @@ class Player(Entity):
         if not cast.node or not any([tag in cast.node.tags for tag in ('pistol', 'smg', 'shotgun')]): return
         if glm.length(self.camera.position - cast.position) > 5: return
         
+        tag = ''
+        match self.game.player_gun.mesh:
+            case self.game.pistol_mesh: tag = 'pistol'
+            case self.game.shotgun_mesh: tag = 'shotgun'
+            case self.game.smg_mesh: tag = 'smg'
+            
+        if len(cast.node.children): cast.node.children[0].mesh = self.game.player_gun.mesh
+        else: cast.node.mesh = self.game.player_gun.mesh
+        
         match cast.node.tags[0]:
             case 'pistol':
                 self.gun = self.game.pistol
@@ -81,6 +90,8 @@ class Player(Entity):
             case 'smg':
                 self.gun = self.game.smg
                 self.game.player_gun.mesh = self.game.smg_mesh
+                
+        cast.node.tags = [tag]
         
     def camera_shake(self, time: float, intensity: float) -> None:
         self.shake_time = time
