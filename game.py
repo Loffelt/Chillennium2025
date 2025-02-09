@@ -112,6 +112,8 @@ class Game():
 
     def load_meshes(self):
         self.pistol_mesh = bsk.Mesh('meshes/pistol.obj')
+        self.shotgun_mesh = bsk.Mesh('meshes/shotgun.obj')
+        self.smg_mesh = bsk.Mesh('meshes/smg.obj')
         self.wedge_mesh = bsk.Mesh('meshes/wedge.obj')
         self.health_cube_mesh = bsk.Mesh('meshes/health_cube.obj')
         self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
