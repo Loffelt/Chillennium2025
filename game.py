@@ -149,26 +149,26 @@ class Game():
         self.dimension_scene.remove(*self.dimension_scene.nodes)
 
     def load_materials(self):
-        self.engine.scene = self.sight_scene
-
         saturation = 80
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
         self.yellow = bsk.Material(color=(255, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.cyan = bsk.Material(color=(saturation, 255, 255), roughness=.8, metallicness=0.0, specular=0.25)
-        self.purple = bsk.Material(color=(255, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
         self.white = bsk.Material(color=(255, 255, 255))
         self.black = bsk.Material(color=(30, 30, 30))
+        self.purple = bsk.Material(color=(255, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
 
-        self.sight_scene.material_handler.add(self.red)
-        self.sight_scene.material_handler.add(self.green)
-        self.sight_scene.material_handler.add(self.blue)
-        self.sight_scene.material_handler.add(self.yellow)
-        self.sight_scene.material_handler.add(self.cyan)
-        self.sight_scene.material_handler.add(self.purple)
-        self.sight_scene.material_handler.add(self.white)
-        self.sight_scene.material_handler.add(self.black)
+        for scene in [self.default_scene, self.plain_scene, self.dimension_scene, self.sight_scene]:
+            self.engine.scene = scene
+            scene.material_handler.add(self.red)
+            scene.material_handler.add(self.green)
+            scene.material_handler.add(self.blue)
+            scene.material_handler.add(self.yellow)
+            scene.material_handler.add(self.cyan)
+            scene.material_handler.add(self.white)
+            scene.material_handler.add(self.black)
+            scene.material_handler.add(self.purple)
 
         self.materials = [self.green, self.blue, self.purple, self.cyan, self.yellow]
 
