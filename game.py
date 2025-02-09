@@ -36,6 +36,7 @@ class Game():
         
         self.load_meshes()
         self.load_materials()
+        self.load_sounds()
         
         self.levels = [level1, level2, level3, level4, level5, level6, level7]
 
@@ -111,6 +112,12 @@ class Game():
 
         #UI
         self.ui = UI(self)
+        
+    def load_sounds(self):
+        self.pin1 = bsk.Sound('sounds/pin1.wav')
+        self.pin2 = bsk.Sound('sounds/pin2.wav')
+        self.kill = bsk.Sound('sounds/kill.wav')
+        self.shot = bsk.Sound('sounds/shot.wav')
         
     def spawn_gun(self, type: str, position: glm.vec3):
         

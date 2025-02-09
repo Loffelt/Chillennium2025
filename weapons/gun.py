@@ -50,6 +50,8 @@ class Gun():
             path = glm.normalize(forward + [random.uniform(-self.spread, self.spread) for _ in range(3)])
             bullets.append(self.get_bullet(position, path))
             
+        self.game.shot.play()
+            
         return bullets
     
     def __repr__(self) -> str:

@@ -40,6 +40,7 @@ class EnemyHandler():
         for enemy in to_remove:
             self.enemies.remove(enemy)
             self.game.sight_scene.remove(enemy.node, enemy.gun_node)
+            self.game.kill.play()
             
     def get_enemy_by_node(self, node) -> Enemy:
         for enemy in self.enemies:

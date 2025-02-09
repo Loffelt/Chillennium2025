@@ -36,6 +36,7 @@ class BulletHandler():
             
             if d1 and d1 <= d2: # detect a ricochet/collision
                 if 'player' not in cast.node.tags and 'enemy' not in cast.node.tags: 
+                    random.choice([self.game.pin1, self.game.pin2]).play()
                     bullet.ricochet(cast.normal if glm.dot(cast.normal, bullet.path) < 0 else -cast.normal)
                     bullet.position = cast.position + cast.normal * 0.01
                     
