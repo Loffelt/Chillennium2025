@@ -23,7 +23,7 @@ class Player(Entity):
         
         """
         self.node.rotation = glm.conjugate(glm.quatLookAt(glm.vec3(self.camera.forward.x, 0, self.camera.forward.z), self.camera.UP))
-        self.game.player_gun.rotation = self.game.sight_scene.camera.rotation
+        self.game.player_gun.rotation = glm.normalize(glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * self.game.sight_scene.camera.rotation)
         self.game.player_gun.position = self.node.position.data + glm.vec3(0, 0.35, 0) + self.camera.right * 0.4 + self.camera.forward * 0.75
         
         if self.position.y < 1.1: 
@@ -111,10 +111,3 @@ def get_player_node() -> Node:
     )
     
     return player_node
-
-def get_player_gun() -> Node:
-    gun = Node(
-        scale = (0.1, 0.1, 1)
-    )
-    
-    return gun

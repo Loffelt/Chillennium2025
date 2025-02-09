@@ -1,6 +1,6 @@
 import basilisk as bsk
 import glm
-from entities.player import Player, get_player_node, get_player_gun
+from entities.player import Player, get_player_node
 from entities.enemy_handler import EnemyHandler
 from weapons.bullet_handler import BulletHandler
 from weapons.gun import Gun
@@ -34,6 +34,8 @@ class Game():
         self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
         self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
         self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
+        
+        self.load_meshes()
         
         self.levels = [level1]
         
@@ -79,7 +81,10 @@ class Game():
         # add player to scene
         player_node = get_player_node()
         
-        self.player_gun = get_player_gun()
+        self.player_gun = bsk.Node(
+            scale = (0.1, 0.1, 0.1),
+            mesh = self.pistol_mesh
+        )
         self.default_scene.add(self.player_gun)
         
         self.player = Player(
@@ -148,6 +153,7 @@ class Game():
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
         self.white = bsk.Material(color=(255, 255, 255))
+        self.black = bsk.Material(color=(30, 30, 30))
         
     def next_level(self):
         level = self.levels.pop(0)
@@ -159,7 +165,6 @@ class Game():
         """
         
         self.render_handler = RenderHandler(self)
-        self.load_meshes()
         
         self.load_level(self.next_level()(self))
 

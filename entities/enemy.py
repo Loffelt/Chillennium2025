@@ -42,7 +42,9 @@ class Enemy(Entity):
         )
         
         self.gun_node = Node(
-            scale = (0.1, 0.1, 7)
+            scale = (0.1, 0.1, 0.1),
+            mesh = self.game.pistol_mesh,
+            material = self.game.red
         )
         
         self.game.sight_scene.add(self.gun_node)
@@ -64,8 +66,8 @@ class Enemy(Entity):
         if glm.length2(direction) < 1e-7: return
         direction = glm.normalize(direction)
         
-        self.gun_node.position = self.mist.chest + direction * 2
-        self.gun_node.rotation = glm.conjugate(glm.quatLookAt(direction, (0, 1, 0)))
+        # self.gun_node.position = self.mist.chest + direction * 2
+        # self.gun_node.rotation = glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * glm.conjugate(glm.quatLookAt(direction, (0, 1, 0)))
         
     def move(self, dt: float) -> None:
         """
