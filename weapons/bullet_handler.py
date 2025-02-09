@@ -57,8 +57,10 @@ class BulletHandler():
                     if enemy: # probably dont need this check
                         enemy.health -= bullet.damage
                         
-                elif bullet.owner == 'enemy' and 'player' in cast.node.tags: ...
-                
+                elif bullet.owner == 'enemy' and 'player' in cast.node.tags:
+                    bullet.ricochet_remaining = -1
+                    self.game.player.health -= 1
+                    
                 # elif cast.node.physics:
                 #     cast.node.apply_offset_force(-cast.normal * 10, cast.position - cast.node.position.data, dt)
                     

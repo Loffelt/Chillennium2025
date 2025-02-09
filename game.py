@@ -145,13 +145,13 @@ class Game():
         
         self.bullet_handler.bullets = []
         self.enemy_handler.enemies = []
-        print(game_scene.enemies)
         self.enemy_handler.enemies = game_scene.enemies[:]
         
         # dimensions scene
         self.dimension_scene.remove(*self.dimension_scene.nodes)
         
         self.player.position = glm.vec3(0, 1, 0)
+        self.player.health = self.player.max_health
         # self.sight_scene.camera.yaw = 0.1
         self.sight_scene.camera.pitch = 0
 
@@ -179,11 +179,6 @@ class Game():
 
         self.materials = [self.green, self.blue, self.purple, self.cyan, self.yellow]
 
-        
-    def next_level(self):
-        level = self.levels.pop(0)
-        return level
-
     def start(self) -> None:
         """
         Starts the engine and the game
@@ -191,14 +186,17 @@ class Game():
         
         self.render_handler = RenderHandler(self)
         self.level_complete = False
-        self.load_level(self.next_level()(self))
+        self.load_level(self.levels[0](self))
 
         while self.engine.running:
 
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1] or len(self.enemy_handler.enemies) < 1 and not self.level_complete:
+                self.levels.pop(0)
                 self.ui.add_transition()
-                self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(self.next_level()(self)))
+                self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(self.levels[0](self)))
                 self.level_complete = True
+                
+            if self.player.health < 1: self.load_level(self.levels[0](self))
 
             if self.engine.keys[bsk.pg.K_2] and not self.engine.previous_keys[bsk.pg.K_2]:
                 self.player.health -= 1
