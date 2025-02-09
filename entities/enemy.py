@@ -26,6 +26,8 @@ class Enemy(Entity):
             color  = 'red',
         )
         
+        self.gun.time = -2
+        
         self.game = game
         self.player: Player = game.player
         self.mist = MistMan(position)
