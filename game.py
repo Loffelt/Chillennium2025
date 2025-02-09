@@ -121,9 +121,6 @@ class Game():
         #UI
         self.ui = UI(self)
 
-    def load_meshes(self):
-        self.cylinder_mesh = bsk.Mesh('meshes/cylinder.obj')
-
     def load_level(self, game_scene: GameScene) -> None:
         """
         Add all nodes to the scene
