@@ -9,7 +9,7 @@ from basilisk import Node
 
 class Enemy(Entity):
     
-    def __init__(self, game, position: glm.vec3, health: int=1, speed: float=3, spread: float=0.05, gun: Gun=None, ai: str='smart') -> None:
+    def __init__(self, game, position: glm.vec3, health: int=1, speed: float=5, spread: float=0.05, gun: Gun=None, ai: str='smart') -> None:
         self.health = health
         self.speed = speed
         self.spread = spread
@@ -35,7 +35,6 @@ class Enemy(Entity):
         
         self.node = Node(
             position + (0, 1, 0),
-            mesh = self.player.game.cylinder_mesh,
             scale = (0.5, 1.8, 0.5),
             collision = True,
             physics = True,
@@ -70,7 +69,7 @@ class Enemy(Entity):
         if glm.length2(direction) < 1e-7: return
         direction = glm.normalize(direction)
         
-        self.node.position.data.y = self.y + 2
+        self.node.position.data.y = self.y + 1.85
         self.node.velocity.y = 0
         self.node.rotation.data = (1, 0, 0, 0)
         

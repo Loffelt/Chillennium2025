@@ -40,26 +40,6 @@ class EnemyHandler():
         for enemy in to_remove:
             self.enemies.remove(enemy)
             self.game.sight_scene.remove(enemy.node, enemy.gun_node)
-        
-        if self.game.engine.keys[pg.K_e] and not self.game.engine.previous_keys[pg.K_e]:
-            self.enemies.append(Enemy(
-                game = self.game,
-                position = glm.vec3([random.uniform(-7, 7), 0, random.uniform(-7, 7)]),
-                health = 1,
-                speed = 3, 
-                spread = 0.1,
-                gun = Gun(
-                    game = self.game,
-                    count = 1,
-                    capacity = 3,
-                    spread = 0.05,
-                    cooldown = 1,
-                    ricochets = 1,
-                    damage = 1,
-                    radius = 0,
-                    color  = 'red',
-                )
-            ))
             
     def get_enemy_by_node(self, node) -> Enemy:
         for enemy in self.enemies:

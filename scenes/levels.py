@@ -38,7 +38,8 @@ def level2(game) -> GameScene:
     
     gs.enemies.append(Enemy(
         game, 
-        glm.vec3(5, 0, -25)
+        glm.vec3(5, 0, -25),
+        ai='smart'
     ))
     
     return gs

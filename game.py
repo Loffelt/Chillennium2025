@@ -246,6 +246,10 @@ class Game():
 
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1] or len(self.enemy_handler.enemies) < 1 and not self.level_complete:
                 self.levels.pop(0)
+                if not len(self.levels):
+                    print('you win')
+                    break
+                
                 self.ui.add_transition()
                 self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(self.levels[0](self)))
                 self.level_complete = True
