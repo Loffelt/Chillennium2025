@@ -2,6 +2,7 @@ import glm
 from basilisk import Node, Engine, pg, FollowCamera
 from entities.entity import Entity
 from weapons.gun import Gun
+import basilisk as bsk
 import random
 
 
@@ -14,10 +15,15 @@ class Player(Entity):
         self.game = game
         self.gun = gun
         self.jumping = False
-            
+        self.max_health = self.health
+        
         self.fov = 70
         self.target_fov = 80
         self.fov_time = 0
+
+        self.health_cube = bsk.Node(mesh=game.health_cube_mesh, scale=.15)
+        self.health_level = bsk.Node(scale=.1, material=game.red)
+        self.game.default_scene.add(self.health_level, self.health_cube)
         
     def update(self, dt: float) -> None:
         """
@@ -25,8 +31,16 @@ class Player(Entity):
         """
         self.node.rotation = glm.conjugate(glm.quatLookAt(glm.vec3(self.camera.forward.x, 0, self.camera.forward.z), self.camera.UP))
         self.game.player_gun.rotation = glm.normalize(glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * self.game.sight_scene.camera.rotation)
-        self.game.player_gun.position = self.node.position.data + glm.vec3(0, 0.35, 0) + self.camera.right * 0.4 + self.camera.forward * 0.75
+        self.game.player_gun.position = self.node.position.data + glm.vec3(0, 0.35, 0) + self.camera.right * 0.75 + self.camera.forward * 0.75
+
+        self.health_cube.rotation = glm.normalize(glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * self.game.sight_scene.camera.rotation)
+        self.health_cube.position = self.node.position.data + glm.vec3(0, 0.5, 0) - self.camera.right * 0.4 + self.camera.forward * 0.75
         
+        self.health_level.scale.y = (self.health / self.max_health + .5) * .1
+        self.health_level.rotation = glm.normalize(glm.conjugate(glm.angleAxis(glm.pi() / 2, (0, 1, 0))) * self.game.sight_scene.camera.rotation)
+        self.health_level.position = self.node.position.data + glm.vec3(0, 0.5, 0) - self.camera.right * 0.4 + self.camera.forward * 0.75
+
+
         if self.position.y < 1.1: 
             self.position.y = 1.1
             if not self.jumping: self.node.velocity.y = 0
