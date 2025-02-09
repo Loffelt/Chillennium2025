@@ -24,4 +24,6 @@ def get_plain_nodes(game_scene: GameScene) -> list[Node]:
             
         node.collision = False
         
+    for node in to_remove: nodes.remove(node)
+        
     return nodes

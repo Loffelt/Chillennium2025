@@ -7,6 +7,7 @@ from weapons.gun import Gun
 from weapons.bullet import Bullet
 from scenes.game_scene import GameScene, get_plain_nodes
 from scenes.test_scene import test_scene
+from scenes.levels import level1
 from render.render_handler import RenderHandler
 from ui.ui import UI
 # import cudart
@@ -33,6 +34,8 @@ class Game():
         self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
         self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
         self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
+        
+        self.levels = [level1]
         
         self.pistol = Gun(
             game = self,
@@ -64,11 +67,11 @@ class Game():
             game = self,
             count = 1,
             capacity = 3,
-            cooldown = 0.075,
-            spread = 0.05,
-            ricochets = 1,
+            cooldown = 0.1,
+            spread = 0.1,
+            ricochets = 0,
             damage = 1,
-            radius = 0.05,
+            radius = 0.03,
             color = 'black',
             owner = 'player'
         )
@@ -83,7 +86,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = self.shotgun,
+            gun = self.submachine,
             node = player_node,
             game = self
         )
@@ -128,8 +131,10 @@ class Game():
         self.plain_scene.add(*get_plain_nodes(game_scene))
         
         # sight scene
-        self.sight_scene.remove(*self.sight_scene.nodes)
-        self.sight_scene.add(*game_scene.nodes, self.player.node)
+        nodes = self.sight_scene.nodes[:]
+        nodes.remove(self.player.node)
+        self.sight_scene.remove(*nodes)
+        self.sight_scene.add(*game_scene.nodes)
         for enemy in game_scene.enemies: self.sight_scene.add(enemy.node)
         
         self.bullet_handler.bullets = []
@@ -143,6 +148,11 @@ class Game():
         self.red = bsk.Material(color=(255, saturation - 50, saturation - 50), roughness=.8, metallicness=0.0, specular=0.25)
         self.green = bsk.Material(color=(saturation, 255, saturation), roughness=.8, metallicness=0.0, specular=0.25)
         self.blue = bsk.Material(color=(saturation, saturation, 255), roughness=.8, metallicness=0.0, specular=0.25)
+        self.white = bsk.Material(color=(255, 255, 255))
+        
+    def next_level(self):
+        level = self.levels.pop(0)
+        return level
 
     def start(self) -> None:
         """
@@ -152,13 +162,13 @@ class Game():
         self.render_handler = RenderHandler(self)
         self.load_meshes()
         
-        self.load_level(test_scene(self))
+        self.load_level(self.next_level()(self))
 
         while self.engine.running:
 
             if self.engine.keys[bsk.pg.K_1] and not self.engine.previous_keys[bsk.pg.K_1]:
                 self.ui.add_transition()
-                self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(test_scene(self)))
+                self.ui.add_transition(duration=1.5, callback= lambda: self.load_level(self.next_level()(self)))
 
             self.bullet_handler.update(self.engine.delta_time)
             self.enemy_handler.update(self.engine.delta_time)
