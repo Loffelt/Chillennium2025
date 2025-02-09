@@ -33,6 +33,32 @@ class Game():
         self.particle_shader = bsk.Shader(self.engine, 'shaders/particle_sight.vert', 'shaders/particle_sight.frag')
         self.invisible_shader = bsk.Shader(self.engine, 'shaders/invisible.vert', 'shaders/invisible.frag')
         self.sight_scene.particle = bsk.ParticleHandler(self.sight_scene, self.particle_shader)
+        
+        self.pistol = Gun(
+            game = self,
+            count = 1,
+            capacity = 7,
+            cooldown = 0.2,
+            spread = 0.02,
+            ricochets = 2,
+            damage = 1,
+            radius = 0.2,
+            color  = 'black',
+            owner  = 'player'
+        )
+        
+        self.shotgun = Gun(
+            game = self,
+            count = 7,
+            capacity = 3,
+            cooldown = 0.6,
+            spread = 0.1,
+            ricochets = 1,
+            damage = 1,
+            radius = 0.125,
+            color = 'black',
+            owner = 'player'
+        )
 
         # add player to scene
         player_node = get_player_node()
@@ -44,18 +70,7 @@ class Game():
             position = glm.vec3(0, 0, 0), 
             health = 3,
             speed = 10,
-            gun = Gun(
-                game = self,
-                count = 1,
-                capacity = 7,
-                cooldown = 0.2,
-                spread = 0.02,
-                ricochets = 10,
-                damage = 1,
-                radius = 0.5,
-                color  = 'black',
-                owner  = 'player'
-            ),
+            gun = self.shotgun,
             node = player_node,
             game = self
         )

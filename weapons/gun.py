@@ -13,19 +13,24 @@ class Gun():
         self.cooldown = cooldown
         self.spread = spread
         
+        self.ricochets = ricochets
+        self.damage = damage
+        self.radius = radius
+        self.color = color
+        self.owner = owner
+        
         self.time = cooldown
         
-        def get_bullet(position: glm.vec3, path: glm.vec3) -> Bullet:
-            if color == 'black':
-                cylinder = Node(
-                    position, 
-                    scale = (radius, 0.01, radius),
-                    mesh = self.game.cylinder_mesh
-                )
-                self.game.dimension_scene.add(cylinder)
-                return Bullet(ricochets, damage, radius, color, cylinder, path, position, owner)
-            else: return Bullet(ricochets, damage, radius, color, None, path, position, owner)
-        self.get_bullet = get_bullet
+    def get_bullet(self, position: glm.vec3, path: glm.vec3) -> Bullet:
+        if self.color == 'black':
+            cylinder = Node(
+                position, 
+                scale = (self.radius, 0.01, self.radius),
+                mesh = self.game.cylinder_mesh
+            )
+            self.game.dimension_scene.add(cylinder)
+            return Bullet(self.ricochets, self.damage, self.radius, self.color, cylinder, glm.vec3(path), glm.vec3(position), self.owner)
+        else: return Bullet(self.ricochets, self.damage, self.radius, self.color, None, glm.vec3(path), glm.vec3(position), self.owner)
         
     def update(self, dt: float) -> None:
         """
